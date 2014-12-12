@@ -17,8 +17,29 @@
 namespace Cantera
 {
 
-class Array2D;
+//! Turbulent reaction rate correction coefficient
 
+static doublereal Cc(doublereal m_b,doublereal m_E,doublereal recipT,doublereal TprimeOverT) {
+
+		doublereal R_const = 1.9872041, t1,t2,t3,t4,t5,t6,t7, f=1;
+		doublereal recipT2 = pow(recipT,2), m_E2 = pow(m_E,2), TPOT2 = pow(TprimeOverT,2), R2 = pow(1.9872041,2);
+		doublereal recipT3 = pow(recipT,3), m_E3 = pow(m_E,3), TPOT3 = pow(TprimeOverT,3), R3 = pow(1.9872041,3);
+		doublereal recipT4 = pow(recipT,4), m_E4 = pow(m_E,4), TPOT4 = pow(TprimeOverT,4), R4 = pow(1.9872041,4);
+		doublereal recipT5 = pow(recipT,5), m_E5 = pow(m_E,5), TPOT5 = pow(TprimeOverT,5), R5 = pow(1.9872041,5);
+		doublereal recipT6 = pow(recipT,6), m_E6 = pow(m_E,6), TPOT6 = pow(TprimeOverT,6), R6 = pow(1.9872041,6);
+		doublereal recipT7 = pow(recipT,7), m_E7 = pow(m_E,7), TPOT7 = pow(TprimeOverT,7), R7 = pow(1.9872041,6);
+
+		t1 = (((((m_b*R_const)+m_E)*recipT)*TprimeOverT)/(R_const))/f;
+		t2 = (((R2*m_b*(m_b-1))+(2*m_E*R_const*(m_b-1)*recipT)+(m_E2*recipT2))/(2*R2*f))*TPOT2;
+		t3 = (((R3*m_b*(m_b-1)*(m_b-2))+(3*m_E*R2*(m_b-1)*(m_b-2)*recipT)+(3*m_E2*R_const*(m_b-2)*recipT2)+(m_E3*recipT3))/(6*R3*f))*TPOT3;
+		t4 = ((((((R4*m_b*(m_b-1)*(m_b-2))*(m_b-3))+(4*m_E*R3*(m_b-1)*(m_b-2))*(m_b-3)*recipT)+(6*m_E2*R2*(m_b-2))*(m_b-3)*recipT2)+(4*m_E3*R_const*(m_b-3)*recipT3)+(m_E4*recipT4))/(24*R4*f))*TPOT4;
+		t5 = ((((((R5*m_b*(m_b-1)*(m_b-2))*(m_b-3)*(m_b-4))+(5*m_E*R4*(m_b-1)*(m_b-2))*(m_b-3)*(m_b-4)*recipT)+(10*m_E2*R3*(m_b-2))*(m_b-3)*(m_b-4)*recipT2)+(10*m_E3*R2*(m_b-3)*(m_b-4)*recipT3)+(5*m_E4*R_const*(m_b-4)*recipT4)+(m_E5*recipT5))/(120*R5*f))*TPOT5;
+		t6 = ((((((R6*m_b*(m_b-1)*(m_b-2))*(m_b-3)*(m_b-4)*(m_b-5))+(6*m_E*R5*(m_b-1)*(m_b-2))*(m_b-3)*(m_b-4)*(m_b-5)*recipT)+(15*m_E2*R4*(m_b-2))*(m_b-3)*(m_b-4)*(m_b-5)*recipT2)+(20*m_E3*R3*(m_b-3)*(m_b-4)*(m_b-5)*recipT3)+(15*m_E4*R2*(m_b-4)*(m_b-5)*recipT4)+(6*m_E5*R_const*(m_b-5)*recipT5)+(m_E6*recipT6))/(720*R6*f))*TPOT6;	
+		t7 = ((((((R7*m_b*(m_b-1)*(m_b-2))*(m_b-3)*(m_b-4)*(m_b-5)*(m_b-6))+(7*m_E*R6*(m_b-1)*(m_b-2))*(m_b-3)*(m_b-4)*(m_b-5)*(m_b-6)*recipT)+(21*m_E2*R5*(m_b-2))*(m_b-3)*(m_b-4)*(m_b-5)*(m_b-6)*recipT2)+(35*m_E3*R4*(m_b-3)*(m_b-4)*(m_b-5)*(m_b-6)*recipT3)+(35*m_E4*R3*(m_b-4)*(m_b-5)*(m_b-6)*recipT4)+(21*m_E5*R2*(m_b-5)*(m_b-6)*recipT5))+(7*m_E6*R_const*(m_b-6)*recipT6)+(m_E7*recipT7))/(5040*R7*f)*TPOT7;	
+		return 1+t1+t2+t3+t4+t5+t6+t7;
+    }
+
+class Array2D;
 //! Arrhenius reaction rate type depends only on temperature
 /**
  * A reaction rate coefficient of the following form.
@@ -82,7 +103,12 @@ public:
         return m_A * std::exp(m_b*logT - m_E*recipT);
     }
 
-    //! @deprecated. To be removed after Cantera 2.2
+	doublereal updateTurbulent(doublereal logT, doublereal recipT, doublereal TprimeOverT) const {
+    return (updateRC(logT,recipT))*(Cc( m_b, m_E, recipT, TprimeOverT));
+	}
+
+   
+   //! @deprecated. To be removed after Cantera 2.2
     void writeUpdateRHS(std::ostream& s) const {
         s << " exp(" << m_logA;
         if (m_b != 0.0) {
@@ -276,7 +302,12 @@ public:
         return m_A * std::exp(m_b*logT - m_E*recipT);
     }
 
+	doublereal updateTurbulent(doublereal logT, doublereal recipT, doublereal TprimeOverT) const {
+    return (updateRC(logT,recipT))*(Cc( m_b, m_E, recipT, TprimeOverT));
+	}
+	
     //! @deprecated. To be removed after Cantera 2.2
+
     void writeUpdateRHS(std::ostream& s) const {
         s << " exp(" << m_logA;
         if (m_b != 0.0) {
@@ -394,7 +425,57 @@ public:
 
         return std::exp(log_k1 + (log_k2-log_k1) * (logP_-logP1_) * rDeltaP_);
     }
+   /**
+     * Update the value of the logarithm of the turbulent rate constant.
+     */
+    doublereal updateTurbLog(doublereal logT, doublereal recipT, doublereal TprimeOverT) const {
+        double log_k1, log_k2;
+        if (m1_ == 1) {
+            log_k1 = (A1_[0] + n1_[0] * logT - Ea1_[0] * recipT)*Cc(n1_[0],Ea1_[0],recipT,TprimeOverT);
+			
+        } else {
+            double k = 1e-300,kTurb; // non-zero to make log(k) finite
+            for (size_t m = 0; m < m1_; m++) {
+                k += A1_[m] * std::exp(n1_[m] * logT - Ea1_[m] * recipT);
+				kTurb += k*Cc(n1_[m],Ea1_[m],recipT,TprimeOverT);
+            }
+			
+            log_k1 = std::log(kTurb);
+        }
 
+
+        if (m2_ == 1) {
+            log_k2 = (A2_[0] + n2_[0] * logT - Ea2_[0] * recipT)*Cc(n2_[0],Ea2_[0],recipT,TprimeOverT);;
+        } else {
+            double k = 1e-300,kTurb; // non-zero to make log(k) finite
+            for (size_t m = 0; m < m2_; m++) {
+                k += A2_[m] * std::exp(n2_[m] * logT - Ea2_[m] * recipT);
+				kTurb += k*(Cc(n2_[m],Ea2_[m],recipT,TprimeOverT));
+            }
+			
+            log_k2 = std::log(kTurb);
+        }
+
+        return log_k1 + (log_k2 - log_k1) * (logP_ - logP1_) * rDeltaP_;
+    }
+
+    /**
+     * Update the value the rate constant.
+     *
+     * This function returns the actual value of the rate constant.
+     */
+    doublereal updateRC(doublereal logT, doublereal recipT) const {
+       return std::exp(update(logT, recipT));
+    }
+    /**
+     * Update the value the turbulent rate constant.
+     *
+     * This function returns the actual value of the turbulent rate constant.
+     */
+	doublereal updateTurbulent(doublereal logT, doublereal recipT, doublereal TprimeOverT) const {
+    return std::exp(updateTurbLog(logT, recipT, TprimeOverT));
+	}
+	
     //! @deprecated. To be removed after Cantera 2.2
     doublereal activationEnergy_R() const {
         throw CanteraError("Plog::activationEnergy_R", "Not implemented");
@@ -511,6 +592,10 @@ public:
         }
         return std::pow(10, logk);
     }
+	
+	doublereal updateTurbulent(doublereal logT, doublereal recipT, doublereal TprimeOverT) const {
+    throw CanteraError("ChebyshevRate::updateTurbulent", "Not implemented");
+	}
 
     //! @deprecated. To be removed after Cantera 2.2
     doublereal activationEnergy_R() const {
