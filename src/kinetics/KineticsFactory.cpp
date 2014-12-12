@@ -11,6 +11,8 @@
 #include "cantera/kinetics/importKinetics.h"
 #include "cantera/kinetics/AqueousKinetics.h"
 #include "cantera/base/xml.h"
+#include "cantera/kinetics/TurbulentKinetics.h"
+
 
 using namespace std;
 
@@ -74,6 +76,10 @@ Kinetics* KineticsFactory::newKinetics(XML_Node& phaseData,
         k = new AqueousKinetics;
         break;
 
+    case cTurbulentKinetics:
+        k = new TurbulentKinetics;
+        break;
+		
     default:
         throw UnknownKineticsModel("KineticsFactory::newKinetics",
                                    kintype);
