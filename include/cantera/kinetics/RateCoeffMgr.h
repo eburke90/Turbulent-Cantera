@@ -7,7 +7,12 @@
 #ifndef CT_RATECOEFF_MGR_H
 #define CT_RATECOEFF_MGR_H
 
+
 #include "RxnRates.h"
+
+
+
+
 
 namespace Cantera
 {
@@ -87,6 +92,14 @@ public:
         }
     }
 
+	void updateTurb(doublereal T, doublereal logT, doublereal* values, doublereal m_Tprime) {
+    doublereal recipT = 1.0/T;
+	doublereal TprimeOverT = m_Tprime*recipT;
+    for (size_t i = 0; i != m_rates.size(); i++) {
+		values[m_rxn[i]] = m_rates[i].updateTurbulent(logT, recipT, TprimeOverT);
+        }
+    }
+
     size_t nReactions() const {
         return m_rates.size();
     }
@@ -95,6 +108,8 @@ protected:
     std::vector<R>             m_rates;
     std::vector<size_t>           m_rxn;
 };
+
+
 
 }
 
