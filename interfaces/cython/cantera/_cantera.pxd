@@ -432,10 +432,6 @@ cdef extern from "cantera/oneD/StFlow.h":
         void setTransport(CxxTransport&) except +
         void setPressure(double)
         double pressure()
-        void setTKE(double)
-        double TKE()
-        void setED(double)
-        double ED()
         void setFixedTempProfile(vector[double]&, vector[double]&)
         void solveEnergyEqn()
         void fixTemperature()
