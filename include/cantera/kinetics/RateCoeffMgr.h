@@ -6,13 +6,7 @@
 
 #ifndef CT_RATECOEFF_MGR_H
 #define CT_RATECOEFF_MGR_H
-
-
 #include "RxnRates.h"
-
-
-
-
 
 namespace Cantera
 {
@@ -59,8 +53,6 @@ public:
         m_rxn.push_back(rxnNumber);
         m_rates.push_back(rate);
     }
-
-
     /**
      * Update the concentration-dependent parts of the rate
      * coefficient, if any. Used by class SurfaceArrhenius to
@@ -99,7 +91,6 @@ public:
 		values[m_rxn[i]] = m_rates[i].updateTurbulent(logT, recipT, TprimeOverT);
         }
     }
-
     size_t nReactions() const {
         return m_rates.size();
     }
@@ -108,8 +99,6 @@ protected:
     std::vector<R>             m_rates;
     std::vector<size_t>           m_rxn;
 };
-
-
 
 }
 
