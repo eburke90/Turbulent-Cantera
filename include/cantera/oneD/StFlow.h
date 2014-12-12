@@ -10,6 +10,7 @@
 #include "cantera/base/Array.h"
 #include "cantera/thermo/IdealGasPhase.h"
 #include "cantera/kinetics/Kinetics.h"
+#include "cantera/kinetics/TurbulentKinetics.h"
 
 namespace Cantera
 {
@@ -97,6 +98,30 @@ public:
         return m_press;
     }
 
+	 //! The current T' 
+    doublereal Tprime() const {
+        return Tprime();
+    }
+
+	//! Set the Turbulent Kinetic Energy
+    void setTKE(doublereal TKE) {
+        m_TKE = TKE;
+    }
+
+    //! The current Turbulent Kinetic Energy
+    doublereal TKE() const {
+        return m_TKE;
+    }
+
+   //! Set the turbulent dissipation 
+    void setED(doublereal ED) {
+        m_ED = ED;
+    }
+
+    //! The current turbulent dissipation
+    doublereal ED() const {
+        return m_ED;
+    }
     //! Write the initial solution estimate into array x.
     virtual void _getInitialSoln(doublereal* x) {
         for (size_t j = 0; j < m_points; j++) {
@@ -412,15 +437,19 @@ protected:
     //! @}
 
     doublereal shear(const doublereal* x, size_t j) const {
-        doublereal c1 = m_visc[j-1]*(V(x,j) - V(x,j-1));
-        doublereal c2 = m_visc[j]*(V(x,j+1) - V(x,j));
+        //doublereal c1 = ((m_visc[j-1]))*(V(x,j) - V(x,j-1));
+		//doublereal c2 = ((m_visc[j]))*(V(x,j+1) - V(x,j));
+		doublereal c1 = ((m_visc[j-1])+(((m_rho[j-1]*0.09*m_TKE*m_TKE)/m_ED)))*(V(x,j) - V(x,j-1));
+		doublereal c2 = ((m_visc[j])+(((m_rho[j]*0.09*m_TKE*m_TKE)/m_ED)))*(V(x,j+1) - V(x,j));
         return 2.0*(c2/(z(j+1) - z(j)) - c1/(z(j) - z(j-1)))/(z(j+1) - z(j-1));
     }
 
     doublereal divHeatFlux(const doublereal* x, size_t j) const {
-        doublereal c1 = m_tcon[j-1]*(T(x,j) - T(x,j-1));
-        doublereal c2 = m_tcon[j]*(T(x,j+1) - T(x,j));
-        return -2.0*(c2/(z(j+1) - z(j)) - c1/(z(j) - z(j-1)))/(z(j+1) - z(j-1));
+		doublereal c1 = ((m_tcon[j-1])+(((m_cp[j-1]*m_rho[j-1]*m_TKE*m_TKE*0.09)/(0.85*m_ED))))*(T(x,j) - T(x,j-1));
+		doublereal c2 = ((m_tcon[j])+(((m_cp[j]*m_rho[j]*m_TKE*m_TKE*0.09)/(0.85*m_ED))))*(T(x,j+1) - T(x,j));
+		//doublereal c1 = ((m_tcon[j-1]))*(T(x,j) - T(x,j-1));
+		//doublereal c2 = ((m_tcon[j]))*(T(x,j+1) - T(x,j));      
+		return -2.0*(c2/(z(j+1) - z(j)) - c1/(z(j) - z(j-1)))/(z(j+1) - z(j-1));
     }
 
     size_t mindex(size_t k, size_t j, size_t m) {
@@ -445,7 +474,12 @@ protected:
     doublereal m_surface_T;
 
     doublereal m_press;        // pressure
+	//Turbulent Kinetic Energy
+	doublereal m_TKE;
 
+	//Epsilon
+	doublereal m_ED;
+	
     // grid parameters
     vector_fp m_dz;
     //vector_fp m_z;
