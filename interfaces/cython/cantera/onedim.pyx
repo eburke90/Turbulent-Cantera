@@ -351,7 +351,7 @@ cdef class _FlowBase(Domain1D):
         def __set__(self, ED):
             self.flow.setED(ED)			
 
-			def set_transport(self, _SolutionBase phase):
+    def set_transport(self, _SolutionBase phase):
         """
         Set the `Solution` object used for calculating transport properties.
         """

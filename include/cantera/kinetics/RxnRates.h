@@ -459,15 +459,7 @@ public:
         return log_k1 + (log_k2 - log_k1) * (logP_ - logP1_) * rDeltaP_;
     }
 
-    /**
-     * Update the value the rate constant.
-     *
-     * This function returns the actual value of the rate constant.
-     */
-    doublereal updateRC(doublereal logT, doublereal recipT) const {
-       return std::exp(update(logT, recipT));
-    }
-    /**
+	 /**
      * Update the value the turbulent rate constant.
      *
      * This function returns the actual value of the turbulent rate constant.
@@ -475,7 +467,7 @@ public:
 	doublereal updateTurbulent(doublereal logT, doublereal recipT, doublereal TprimeOverT) const {
     return std::exp(updateTurbLog(logT, recipT, TprimeOverT));
 	}
-	
+
     //! @deprecated. To be removed after Cantera 2.2
     doublereal activationEnergy_R() const {
         throw CanteraError("Plog::activationEnergy_R", "Not implemented");

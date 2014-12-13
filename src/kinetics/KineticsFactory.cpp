@@ -22,9 +22,9 @@ namespace Cantera
 KineticsFactory* KineticsFactory::s_factory = 0;
 mutex_t KineticsFactory::kinetics_mutex;
 
-static int ntypes = 5;
-static string _types[] = {"none", "GasKinetics", "Interface", "Edge", "AqueousKinetics"};
-static int _itypes[]   = {0, cGasKinetics, cInterfaceKinetics, cEdgeKinetics, cAqueousKinetics};
+static int ntypes = 6;
+static string _types[] = {"none", "GasKinetics", "Interface", "Edge", "AqueousKinetics", "TurbulentKinetics"};
+static int _itypes[]   = {0, cGasKinetics, cInterfaceKinetics, cEdgeKinetics, cAqueousKinetics, cTurbulentKinetics};
 
 Kinetics* KineticsFactory::newKinetics(XML_Node& phaseData,
                                        vector<ThermoPhase*> th)
@@ -79,7 +79,6 @@ Kinetics* KineticsFactory::newKinetics(XML_Node& phaseData,
     case cTurbulentKinetics:
         k = new TurbulentKinetics;
         break;
-		
     default:
         throw UnknownKineticsModel("KineticsFactory::newKinetics",
                                    kintype);
@@ -109,7 +108,6 @@ Kinetics* KineticsFactory::newKinetics(const string& model)
     case cGasKinetics:
         k = new GasKinetics;
         break;
-
     case cInterfaceKinetics:
         k = new InterfaceKinetics;
         break;
