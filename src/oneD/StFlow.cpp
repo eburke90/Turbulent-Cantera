@@ -197,22 +197,17 @@ void StFlow::setGasAtMidpoint(const doublereal* x, size_t j)
     }
     m_thermo->setMassFractions_NoNorm(DATA_PTR(m_ybar));
     m_thermo->setPressure(m_press);
-	doublereal viscTurb, TempPrime, grad_T_2,grad_T, mean_rho, count;	
-	count = 0; mean_rho = 0;
+	doublereal viscTurb, TempPrime, grad_T_2,grad_T;	
 
-	for (j = 1; j < m_points; j++) {
-		mean_rho += m_rho[j];
-		count += 1;
-    }
 	if (j == 1){
 		grad_T = 0;
 	}else{
 	grad_T = (T(x,j)-T(x,j-1))/(m_z[j]-m_z[j-1]);
 	}
-	mean_rho = mean_rho/count;
+
 	grad_T_2 = pow(grad_T,2.0);
 	viscTurb = (((m_rho[j] * 0.09*m_TKE*m_TKE)/m_ED));
-	TempPrime = sqrt((2.86*viscTurb*((grad_T_2)))/(2.0 * mean_rho *(m_ED/m_TKE)));
+	TempPrime = sqrt((2.86*viscTurb*((grad_T_2)))/(2.0 * m_rho[j] *(m_ED/m_TKE)));
 
 	TurbulentKinetics* turbKin = dynamic_cast<TurbulentKinetics*>(m_kin);
     if (turbKin) {
@@ -370,7 +365,7 @@ void StFlow::eval(size_t jg, doublereal* xg,
 
 			//Calculate the Eddy Dissapation Concept Values
 
-			doublereal  EDC = ((2.1337*(sqrt(sqrt(((m_visc[j]*m_ED)/(m_rho[j]*m_TKE*m_TKE)))))));//0.3967;
+			doublereal  EDC = ((2.1337*(sqrt(sqrt(((m_visc[j]*m_ED)/(m_rho[j]*m_TKE*m_TKE)))))));
 
 			if (EDC>1) {
 				 EDC = 1;
@@ -385,7 +380,7 @@ void StFlow::eval(size_t jg, doublereal* xg,
                 diffus = 2.0*(m_flux(k,j) - m_flux(k,j-1))
                          /(z(j+1) - z(j-1));
                 rsd[index(c_offset_Y + k, j)]
-                = (((m_wt[k]*(wdot(k,j)))*(2.1337*(sqrt(sqrt(((m_visc[j]*m_ED)/(m_rho[j]*m_TKE*m_TKE)))))))
+                = (((m_wt[k]*(wdot(k,j)))*EDC)
                    - convec - diffus)/m_rho[j]
                   - rdt*(Y(x,k,j) - Y_prev(k,j));
                 diag[index(c_offset_Y + k, j)] = 1;
@@ -422,7 +417,7 @@ void StFlow::eval(size_t jg, doublereal* xg,
 
                 rsd[index(c_offset_T, j)]   =
                     - m_cp[j]*rho_u(x,j)*dtdzj
-                    - divHeatFlux(x,j) - ((sum)*((2.1337*(sqrt(sqrt(((m_visc[j]*m_ED)/(m_rho[j]*m_TKE*m_TKE)))))))) - sum2;
+                    - divHeatFlux(x,j) - (sum*EDC) - sum2;
                 rsd[index(c_offset_T, j)] /= (m_rho[j]*m_cp[j]);
 
                 rsd[index(c_offset_T, j)] -= rdt*(T(x,j) - T_prev(j));
