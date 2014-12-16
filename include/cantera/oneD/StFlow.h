@@ -12,6 +12,7 @@
 #include "cantera/kinetics/Kinetics.h"
 #include "cantera/kinetics/TurbulentKinetics.h"
 
+
 namespace Cantera
 {
 //------------------------------------------
@@ -101,6 +102,11 @@ public:
 	 //! The current T' 
     doublereal Tprime() const {
         return Tprime();
+    }
+
+    //! The current Turbulent Kinetic Energy
+    doublereal grad_T(size_t j) const {
+        return m_grad_T[j];
     }
 
 	//! Set the Turbulent Kinetic Energy
@@ -476,6 +482,7 @@ protected:
     doublereal m_press;        // pressure
 	//Turbulent Kinetic Energy
 	doublereal m_TKE;
+	vector_fp m_grad_T;
 
 	//Epsilon
 	doublereal m_ED;

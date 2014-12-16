@@ -436,6 +436,7 @@ cdef extern from "cantera/oneD/StFlow.h":
         double TKE()
         void setED(double)
         double ED()
+        double grad_T()
         void setFixedTempProfile(vector[double]&, vector[double]&)
         void solveEnergyEqn()
         void fixTemperature()

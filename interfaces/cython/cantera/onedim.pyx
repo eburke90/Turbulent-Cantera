@@ -341,6 +341,11 @@ cdef class _FlowBase(Domain1D):
         def __set__(self, P):
             self.flow.setPressure(P)
 			
+    property Tgrad:
+        """ Temperature Fluctuation """
+        def __get__(self):
+            return self.flow.grad_T()
+		
     property TKE:
         """ Turbulent Kinetic Energy """
         def __set__(self, TKE):

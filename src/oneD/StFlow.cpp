@@ -197,15 +197,16 @@ void StFlow::setGasAtMidpoint(const doublereal* x, size_t j)
     }
     m_thermo->setMassFractions_NoNorm(DATA_PTR(m_ybar));
     m_thermo->setPressure(m_press);
-	doublereal viscTurb, TempPrime, grad_T_2,grad_T;	
+	doublereal viscTurb, TempPrime, grad_T_2,dtdzj;	
 
 	if (j == 1){
-		grad_T = 0;
+		m_grad_T[j] = 0;
 	}else{
-	grad_T = (T(x,j)-T(x,j-1))/(m_z[j]-m_z[j-1]);
+	m_grad_T[j] = (T(x,j)-T(x,j-1))/(m_z[j]-m_z[j-1]);
 	}
-
-	grad_T_2 = pow(grad_T,2.0);
+	ban = 63;
+	dtdzj = dTdz(x,j);
+	grad_T_2 = pow(dtdzj,2.0);
 	viscTurb = (((m_rho[j] * 0.09*m_TKE*m_TKE)/m_ED));
 	TempPrime = sqrt((2.86*viscTurb*((grad_T_2)))/(2.0 * m_rho[j] *(m_ED/m_TKE)));
 
