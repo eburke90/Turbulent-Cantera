@@ -435,14 +435,17 @@ cdef extern from "cantera/oneD/StFlow.h":
         void setTKE(double)
         double TKE()
         void setED(double)
+        void getTgrad(double*) except +
+        void getviscTurb(double*) except +
         double ED()
-        double grad_T()
         void setFixedTempProfile(vector[double]&, vector[double]&)
         void solveEnergyEqn()
         void fixTemperature()
         cbool doEnergy(size_t)
         void enableSoret(cbool)
         cbool withSoret()
+		
+	
 
     cdef cppclass CxxFreeFlame "Cantera::FreeFlame":
         CxxFreeFlame(CxxIdealGasPhase*, int, int)

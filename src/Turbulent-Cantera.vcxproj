@@ -1,0 +1,542 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\08008043\Documents\Cantera\Turbulent-Cantera\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="apps\csvdiff.cpp" />
+    <ClCompile Include="apps\mdp_allo.cpp" />
+    <ClCompile Include="apps\tok_input_util.cpp" />
+    <ClCompile Include="base\application.cpp" />
+    <ClCompile Include="base\checkFinite.cpp" />
+    <ClCompile Include="base\clockWC.cpp" />
+    <ClCompile Include="base\ct2ctml.cpp" />
+    <ClCompile Include="base\ctexceptions.cpp" />
+    <ClCompile Include="base\ctml.cpp" />
+    <ClCompile Include="base\global.cpp" />
+    <ClCompile Include="base\plots.cpp" />
+    <ClCompile Include="base\stringUtils.cpp" />
+    <ClCompile Include="base\ValueCache.cpp" />
+    <ClCompile Include="base\xml.cpp" />
+    <ClCompile Include="clib\ct.cpp" />
+    <ClCompile Include="clib\ctfunc.cpp" />
+    <ClCompile Include="clib\ctmultiphase.cpp" />
+    <ClCompile Include="clib\ctonedim.cpp" />
+    <ClCompile Include="clib\ctreactor.cpp" />
+    <ClCompile Include="clib\ctrpath.cpp" />
+    <ClCompile Include="clib\ctsurf.cpp" />
+    <ClCompile Include="clib\ctxml.cpp" />
+    <ClCompile Include="equil\BasisOptimize.cpp" />
+    <ClCompile Include="equil\ChemEquil.cpp" />
+    <ClCompile Include="equil\equilibrate.cpp" />
+    <ClCompile Include="equil\MultiPhase.cpp" />
+    <ClCompile Include="equil\MultiPhaseEquil.cpp" />
+    <ClCompile Include="equil\vcs_elem.cpp" />
+    <ClCompile Include="equil\vcs_elem_rearrange.cpp" />
+    <ClCompile Include="equil\vcs_equilibrate.cpp" />
+    <ClCompile Include="equil\vcs_Gibbs.cpp" />
+    <ClCompile Include="equil\vcs_inest.cpp" />
+    <ClCompile Include="equil\vcs_MultiPhaseEquil.cpp" />
+    <ClCompile Include="equil\vcs_nondim.cpp" />
+    <ClCompile Include="equil\vcs_phaseStability.cpp" />
+    <ClCompile Include="equil\vcs_prep.cpp" />
+    <ClCompile Include="equil\vcs_prob.cpp" />
+    <ClCompile Include="equil\vcs_rank.cpp" />
+    <ClCompile Include="equil\vcs_rearrange.cpp" />
+    <ClCompile Include="equil\vcs_report.cpp" />
+    <ClCompile Include="equil\vcs_root1d.cpp" />
+    <ClCompile Include="equil\vcs_rxnadj.cpp" />
+    <ClCompile Include="equil\vcs_setMolesLinProg.cpp" />
+    <ClCompile Include="equil\vcs_solve.cpp" />
+    <ClCompile Include="equil\vcs_solve_phaseStability.cpp" />
+    <ClCompile Include="equil\vcs_solve_TP.cpp" />
+    <ClCompile Include="equil\vcs_SpeciesProperties.cpp" />
+    <ClCompile Include="equil\vcs_species_thermo.cpp" />
+    <ClCompile Include="equil\vcs_TP.cpp" />
+    <ClCompile Include="equil\vcs_util.cpp" />
+    <ClCompile Include="equil\vcs_VolPhase.cpp" />
+    <ClCompile Include="fortran\fct.cpp" />
+    <ClCompile Include="fortran\fctxml.cpp" />
+    <ClCompile Include="kinetics\AqueousKinetics.cpp" />
+    <ClCompile Include="kinetics\BulkKinetics.cpp" />
+    <ClCompile Include="kinetics\ElectrodeKinetics.cpp" />
+    <ClCompile Include="kinetics\ExtraGlobalRxn.cpp" />
+    <ClCompile Include="kinetics\FalloffFactory.cpp" />
+    <ClCompile Include="kinetics\GasKinetics.cpp" />
+    <ClCompile Include="kinetics\Group.cpp" />
+    <ClCompile Include="kinetics\ImplicitSurfChem.cpp" />
+    <ClCompile Include="kinetics\importKinetics.cpp" />
+    <ClCompile Include="kinetics\InterfaceKinetics.cpp" />
+    <ClCompile Include="kinetics\Kinetics.cpp" />
+    <ClCompile Include="kinetics\KineticsFactory.cpp" />
+    <ClCompile Include="kinetics\Reaction.cpp" />
+    <ClCompile Include="kinetics\ReactionPath.cpp" />
+    <ClCompile Include="kinetics\ReactionStoichMgr.cpp" />
+    <ClCompile Include="kinetics\RxnMolChange.cpp" />
+    <ClCompile Include="kinetics\RxnRates.cpp" />
+    <ClCompile Include="kinetics\solveSP.cpp" />
+    <ClCompile Include="kinetics\TurbulentKinetics.cpp" />
+    <ClCompile Include="matlab\ctfunctions.cpp" />
+    <ClCompile Include="matlab\ctmethods.cpp" />
+    <ClCompile Include="matlab\flowdevicemethods.cpp" />
+    <ClCompile Include="matlab\funcmethods.cpp" />
+    <ClCompile Include="matlab\kineticsmethods.cpp" />
+    <ClCompile Include="matlab\mixturemethods.cpp" />
+    <ClCompile Include="matlab\onedimmethods.cpp" />
+    <ClCompile Include="matlab\phasemethods.cpp" />
+    <ClCompile Include="matlab\reactormethods.cpp" />
+    <ClCompile Include="matlab\reactornetmethods.cpp" />
+    <ClCompile Include="matlab\surfmethods.cpp" />
+    <ClCompile Include="matlab\thermomethods.cpp" />
+    <ClCompile Include="matlab\transportmethods.cpp" />
+    <ClCompile Include="matlab\wallmethods.cpp" />
+    <ClCompile Include="matlab\xmlmethods.cpp" />
+    <ClCompile Include="numerics\BandMatrix.cpp" />
+    <ClCompile Include="numerics\BEulerInt.cpp" />
+    <ClCompile Include="numerics\CVodeInt.cpp" />
+    <ClCompile Include="numerics\CVodesIntegrator.cpp" />
+    <ClCompile Include="numerics\DAE_solvers.cpp" />
+    <ClCompile Include="numerics\DenseMatrix.cpp" />
+    <ClCompile Include="numerics\Func1.cpp" />
+    <ClCompile Include="numerics\funcs.cpp" />
+    <ClCompile Include="numerics\GeneralMatrix.cpp" />
+    <ClCompile Include="numerics\IDA_Solver.cpp" />
+    <ClCompile Include="numerics\NonlinearSolver.cpp" />
+    <ClCompile Include="numerics\ODE_integrators.cpp" />
+    <ClCompile Include="numerics\ResidJacEval.cpp" />
+    <ClCompile Include="numerics\RootFind.cpp" />
+    <ClCompile Include="numerics\solveProb.cpp" />
+    <ClCompile Include="numerics\SquareMatrix.cpp" />
+    <ClCompile Include="oned\boundaries1D.cpp" />
+    <ClCompile Include="oned\Domain1D.cpp" />
+    <ClCompile Include="oned\MultiJac.cpp" />
+    <ClCompile Include="oned\MultiNewton.cpp" />
+    <ClCompile Include="oned\OneDim.cpp" />
+    <ClCompile Include="oned\refine.cpp" />
+    <ClCompile Include="oned\Sim1D.cpp" />
+    <ClCompile Include="oned\StFlow.cpp" />
+    <ClCompile Include="thermo\ConstCpPoly.cpp" />
+    <ClCompile Include="thermo\ConstDensityThermo.cpp" />
+    <ClCompile Include="thermo\DebyeHuckel.cpp" />
+    <ClCompile Include="thermo\Elements.cpp" />
+    <ClCompile Include="thermo\FixedChemPotSSTP.cpp" />
+    <ClCompile Include="thermo\GeneralSpeciesThermo.cpp" />
+    <ClCompile Include="thermo\GibbsExcessVPSSTP.cpp" />
+    <ClCompile Include="thermo\HMWSoln.cpp" />
+    <ClCompile Include="thermo\HMWSoln_input.cpp" />
+    <ClCompile Include="thermo\IdealGasPhase.cpp" />
+    <ClCompile Include="thermo\IdealMolalSoln.cpp" />
+    <ClCompile Include="thermo\IdealSolidSolnPhase.cpp" />
+    <ClCompile Include="thermo\IdealSolnGasVPSS.cpp" />
+    <ClCompile Include="thermo\IonsFromNeutralVPSSTP.cpp" />
+    <ClCompile Include="thermo\LatticePhase.cpp" />
+    <ClCompile Include="thermo\LatticeSolidPhase.cpp" />
+    <ClCompile Include="thermo\MargulesVPSSTP.cpp" />
+    <ClCompile Include="thermo\MaskellSolidSolnPhase.cpp" />
+    <ClCompile Include="thermo\MetalSHEelectrons.cpp" />
+    <ClCompile Include="thermo\MineralEQ3.cpp" />
+    <ClCompile Include="thermo\MixedSolventElectrolyte.cpp" />
+    <ClCompile Include="thermo\MixtureFugacityTP.cpp" />
+    <ClCompile Include="thermo\MolalityVPSSTP.cpp" />
+    <ClCompile Include="thermo\MolarityIonicVPSSTP.cpp" />
+    <ClCompile Include="thermo\Mu0Poly.cpp" />
+    <ClCompile Include="thermo\Nasa9Poly1.cpp" />
+    <ClCompile Include="thermo\Nasa9PolyMultiTempRegion.cpp" />
+    <ClCompile Include="thermo\NasaPoly2.cpp" />
+    <ClCompile Include="thermo\NasaThermo.cpp" />
+    <ClCompile Include="thermo\PDSS.cpp" />
+    <ClCompile Include="thermo\PDSS_ConstVol.cpp" />
+    <ClCompile Include="thermo\PDSS_HKFT.cpp" />
+    <ClCompile Include="thermo\PDSS_IdealGas.cpp" />
+    <ClCompile Include="thermo\PDSS_IonsFromNeutral.cpp" />
+    <ClCompile Include="thermo\PDSS_SSVol.cpp" />
+    <ClCompile Include="thermo\PDSS_Water.cpp" />
+    <ClCompile Include="thermo\Phase.cpp" />
+    <ClCompile Include="thermo\PhaseCombo_Interaction.cpp" />
+    <ClCompile Include="thermo\PseudoBinaryVPSSTP.cpp" />
+    <ClCompile Include="thermo\PureFluidPhase.cpp" />
+    <ClCompile Include="thermo\RedlichKisterVPSSTP.cpp" />
+    <ClCompile Include="thermo\RedlichKwongMFTP.cpp" />
+    <ClCompile Include="thermo\SemiconductorPhase.cpp" />
+    <ClCompile Include="thermo\SingleSpeciesTP.cpp" />
+    <ClCompile Include="thermo\Species.cpp" />
+    <ClCompile Include="thermo\SpeciesThermo.cpp" />
+    <ClCompile Include="thermo\SpeciesThermoFactory.cpp" />
+    <ClCompile Include="thermo\SpeciesThermoInterpType.cpp" />
+    <ClCompile Include="thermo\StatMech.cpp" />
+    <ClCompile Include="thermo\StoichSubstance.cpp" />
+    <ClCompile Include="thermo\StoichSubstanceSSTP.cpp" />
+    <ClCompile Include="thermo\SurfPhase.cpp" />
+    <ClCompile Include="thermo\ThermoFactory.cpp" />
+    <ClCompile Include="thermo\ThermoPhase.cpp" />
+    <ClCompile Include="thermo\VPSSMgr.cpp" />
+    <ClCompile Include="thermo\VPSSMgrFactory.cpp" />
+    <ClCompile Include="thermo\VPSSMgr_ConstVol.cpp" />
+    <ClCompile Include="thermo\VPSSMgr_General.cpp" />
+    <ClCompile Include="thermo\VPSSMgr_IdealGas.cpp" />
+    <ClCompile Include="thermo\VPSSMgr_Water_ConstVol.cpp" />
+    <ClCompile Include="thermo\VPSSMgr_Water_HKFT.cpp" />
+    <ClCompile Include="thermo\VPStandardStateTP.cpp" />
+    <ClCompile Include="thermo\WaterProps.cpp" />
+    <ClCompile Include="thermo\WaterPropsIAPWS.cpp" />
+    <ClCompile Include="thermo\WaterPropsIAPWSphi.cpp" />
+    <ClCompile Include="thermo\WaterSSTP.cpp" />
+    <ClCompile Include="tpx\CarbonDioxide.cpp" />
+    <ClCompile Include="tpx\Heptane.cpp" />
+    <ClCompile Include="tpx\HFC134a.cpp" />
+    <ClCompile Include="tpx\Hydrogen.cpp" />
+    <ClCompile Include="tpx\lk.cpp" />
+    <ClCompile Include="tpx\Methane.cpp" />
+    <ClCompile Include="tpx\Nitrogen.cpp" />
+    <ClCompile Include="tpx\Oxygen.cpp" />
+    <ClCompile Include="tpx\RedlichKwong.cpp" />
+    <ClCompile Include="tpx\Sub.cpp" />
+    <ClCompile Include="tpx\utils.cpp" />
+    <ClCompile Include="tpx\Water.cpp" />
+    <ClCompile Include="transport\AqueousTransport.cpp" />
+    <ClCompile Include="transport\DustyGasTransport.cpp" />
+    <ClCompile Include="transport\GasTransport.cpp" />
+    <ClCompile Include="transport\HighPressureGasTransport.cpp" />
+    <ClCompile Include="transport\LiquidTranInteraction.cpp" />
+    <ClCompile Include="transport\LiquidTransport.cpp" />
+    <ClCompile Include="transport\LiquidTransportData.cpp" />
+    <ClCompile Include="transport\LiquidTransportParams.cpp" />
+    <ClCompile Include="transport\LTPspecies.cpp" />
+    <ClCompile Include="transport\MixTransport.cpp" />
+    <ClCompile Include="transport\MMCollisionInt.cpp" />
+    <ClCompile Include="transport\MultiTransport.cpp" />
+    <ClCompile Include="transport\PecosTransport.cpp" />
+    <ClCompile Include="transport\SimpleTransport.cpp" />
+    <ClCompile Include="transport\SolidTransport.cpp" />
+    <ClCompile Include="transport\SolidTransportData.cpp" />
+    <ClCompile Include="transport\TransportBase.cpp" />
+    <ClCompile Include="transport\TransportFactory.cpp" />
+    <ClCompile Include="transport\TransportParams.cpp" />
+    <ClCompile Include="transport\WaterTransport.cpp" />
+    <ClCompile Include="zerod\ConstPressureReactor.cpp" />
+    <ClCompile Include="zerod\FlowDevice.cpp" />
+    <ClCompile Include="zerod\FlowReactor.cpp" />
+    <ClCompile Include="zerod\IdealGasConstPressureReactor.cpp" />
+    <ClCompile Include="zerod\IdealGasReactor.cpp" />
+    <ClCompile Include="zerod\Reactor.cpp" />
+    <ClCompile Include="zerod\ReactorBase.cpp" />
+    <ClCompile Include="zerod\ReactorFactory.cpp" />
+    <ClCompile Include="zerod\ReactorNet.cpp" />
+    <ClCompile Include="zerod\Wall.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\cantera\base\Array.h" />
+    <ClInclude Include="..\include\cantera\base\clockWC.h" />
+    <ClInclude Include="..\include\cantera\base\config.h" />
+    <ClInclude Include="..\include\cantera\base\ctexceptions.h" />
+    <ClInclude Include="..\include\cantera\base\ctml.h" />
+    <ClInclude Include="..\include\cantera\base\ct_defs.h" />
+    <ClInclude Include="..\include\cantera\base\ct_thread.h" />
+    <ClInclude Include="..\include\cantera\base\FactoryBase.h" />
+    <ClInclude Include="..\include\cantera\base\global.h" />
+    <ClInclude Include="..\include\cantera\base\logger.h" />
+    <ClInclude Include="..\include\cantera\base\plots.h" />
+    <ClInclude Include="..\include\cantera\base\smart_ptr.h" />
+    <ClInclude Include="..\include\cantera\base\stringUtils.h" />
+    <ClInclude Include="..\include\cantera\base\utilities.h" />
+    <ClInclude Include="..\include\cantera\base\ValueCache.h" />
+    <ClInclude Include="..\include\cantera\base\vec_functions.h" />
+    <ClInclude Include="..\include\cantera\base\xml.h" />
+    <ClInclude Include="..\include\cantera\cython\funcWrapper.h" />
+    <ClInclude Include="..\include\cantera\cython\wrappers.h" />
+    <ClInclude Include="..\include\cantera\Edge.h" />
+    <ClInclude Include="..\include\cantera\electrolyteThermo.h" />
+    <ClInclude Include="..\include\cantera\equilibrium.h" />
+    <ClInclude Include="..\include\cantera\equil\ChemEquil.h" />
+    <ClInclude Include="..\include\cantera\equil\equil.h" />
+    <ClInclude Include="..\include\cantera\equil\MultiPhase.h" />
+    <ClInclude Include="..\include\cantera\equil\MultiPhaseEquil.h" />
+    <ClInclude Include="..\include\cantera\equil\vcs_defs.h" />
+    <ClInclude Include="..\include\cantera\equil\vcs_internal.h" />
+    <ClInclude Include="..\include\cantera\equil\vcs_MultiPhaseEquil.h" />
+    <ClInclude Include="..\include\cantera\equil\vcs_prob.h" />
+    <ClInclude Include="..\include\cantera\equil\vcs_solve.h" />
+    <ClInclude Include="..\include\cantera\equil\vcs_SpeciesProperties.h" />
+    <ClInclude Include="..\include\cantera\equil\vcs_species_thermo.h" />
+    <ClInclude Include="..\include\cantera\equil\vcs_VolPhase.h" />
+    <ClInclude Include="..\include\cantera\IdealGasMix.h" />
+    <ClInclude Include="..\include\cantera\IncompressibleSolid.h" />
+    <ClInclude Include="..\include\cantera\integrators.h" />
+    <ClInclude Include="..\include\cantera\Interface.h" />
+    <ClInclude Include="..\include\cantera\kinetics.h" />
+    <ClInclude Include="..\include\cantera\kinetics\AqueousKinetics.h" />
+    <ClInclude Include="..\include\cantera\kinetics\BulkKinetics.h" />
+    <ClInclude Include="..\include\cantera\kinetics\EdgeKinetics.h" />
+    <ClInclude Include="..\include\cantera\kinetics\ElectrodeKinetics.h" />
+    <ClInclude Include="..\include\cantera\kinetics\Enhanced3BConc.h" />
+    <ClInclude Include="..\include\cantera\kinetics\ExtraGlobalRxn.h" />
+    <ClInclude Include="..\include\cantera\kinetics\Falloff.h" />
+    <ClInclude Include="..\include\cantera\kinetics\FalloffFactory.h" />
+    <ClInclude Include="..\include\cantera\kinetics\FalloffMgr.h" />
+    <ClInclude Include="..\include\cantera\kinetics\GasKinetics.h" />
+    <ClInclude Include="..\include\cantera\kinetics\Group.h" />
+    <ClInclude Include="..\include\cantera\kinetics\ImplicitSurfChem.h" />
+    <ClInclude Include="..\include\cantera\kinetics\importKinetics.h" />
+    <ClInclude Include="..\include\cantera\kinetics\InterfaceKinetics.h" />
+    <ClInclude Include="..\include\cantera\kinetics\Kinetics.h" />
+    <ClInclude Include="..\include\cantera\kinetics\KineticsFactory.h" />
+    <ClInclude Include="..\include\cantera\kinetics\RateCoeffMgr.h" />
+    <ClInclude Include="..\include\cantera\kinetics\Reaction.h" />
+    <ClInclude Include="..\include\cantera\kinetics\ReactionData.h" />
+    <ClInclude Include="..\include\cantera\kinetics\ReactionPath.h" />
+    <ClInclude Include="..\include\cantera\kinetics\ReactionStoichMgr.h" />
+    <ClInclude Include="..\include\cantera\kinetics\reaction_defs.h" />
+    <ClInclude Include="..\include\cantera\kinetics\RxnMolChange.h" />
+    <ClInclude Include="..\include\cantera\kinetics\RxnRates.h" />
+    <ClInclude Include="..\include\cantera\kinetics\solveSP.h" />
+    <ClInclude Include="..\include\cantera\kinetics\StoichManager.h" />
+    <ClInclude Include="..\include\cantera\kinetics\ThirdBodyMgr.h" />
+    <ClInclude Include="..\include\cantera\kinetics\TurbulentKinetics.h" />
+    <ClInclude Include="..\include\cantera\Metal.h" />
+    <ClInclude Include="..\include\cantera\numerics.h" />
+    <ClInclude Include="..\include\cantera\numerics\BandMatrix.h" />
+    <ClInclude Include="..\include\cantera\numerics\BEulerInt.h" />
+    <ClInclude Include="..\include\cantera\numerics\ctlapack.h" />
+    <ClInclude Include="..\include\cantera\numerics\CVodesIntegrator.h" />
+    <ClInclude Include="..\include\cantera\numerics\DAE_Solver.h" />
+    <ClInclude Include="..\include\cantera\numerics\DenseMatrix.h" />
+    <ClInclude Include="..\include\cantera\numerics\Func1.h" />
+    <ClInclude Include="..\include\cantera\numerics\FuncEval.h" />
+    <ClInclude Include="..\include\cantera\numerics\funcs.h" />
+    <ClInclude Include="..\include\cantera\numerics\GeneralMatrix.h" />
+    <ClInclude Include="..\include\cantera\numerics\IDA_Solver.h" />
+    <ClInclude Include="..\include\cantera\numerics\Integrator.h" />
+    <ClInclude Include="..\include\cantera\numerics\NonlinearSolver.h" />
+    <ClInclude Include="..\include\cantera\numerics\polyfit.h" />
+    <ClInclude Include="..\include\cantera\numerics\ResidEval.h" />
+    <ClInclude Include="..\include\cantera\numerics\ResidJacEval.h" />
+    <ClInclude Include="..\include\cantera\numerics\RootFind.h" />
+    <ClInclude Include="..\include\cantera\numerics\solveProb.h" />
+    <ClInclude Include="..\include\cantera\numerics\SquareMatrix.h" />
+    <ClInclude Include="..\include\cantera\onedim.h" />
+    <ClInclude Include="..\include\cantera\oned\Domain1D.h" />
+    <ClInclude Include="..\include\cantera\oned\Inlet1D.h" />
+    <ClInclude Include="..\include\cantera\oned\MultiJac.h" />
+    <ClInclude Include="..\include\cantera\oned\MultiNewton.h" />
+    <ClInclude Include="..\include\cantera\oned\OneDim.h" />
+    <ClInclude Include="..\include\cantera\oned\refine.h" />
+    <ClInclude Include="..\include\cantera\oned\Sim1D.h" />
+    <ClInclude Include="..\include\cantera\oned\StFlow.h" />
+    <ClInclude Include="..\include\cantera\PureFluid.h" />
+    <ClInclude Include="..\include\cantera\reactionpaths.h" />
+    <ClInclude Include="..\include\cantera\solvers.h" />
+    <ClInclude Include="..\include\cantera\surface.h" />
+    <ClInclude Include="..\include\cantera\thermo.h" />
+    <ClInclude Include="..\include\cantera\thermo\AdsorbateThermo.h" />
+    <ClInclude Include="..\include\cantera\thermo\ConstCpPoly.h" />
+    <ClInclude Include="..\include\cantera\thermo\ConstDensityThermo.h" />
+    <ClInclude Include="..\include\cantera\thermo\DebyeHuckel.h" />
+    <ClInclude Include="..\include\cantera\thermo\EdgePhase.h" />
+    <ClInclude Include="..\include\cantera\thermo\electrolytes.h" />
+    <ClInclude Include="..\include\cantera\thermo\Elements.h" />
+    <ClInclude Include="..\include\cantera\thermo\FixedChemPotSSTP.h" />
+    <ClInclude Include="..\include\cantera\thermo\GeneralSpeciesThermo.h" />
+    <ClInclude Include="..\include\cantera\thermo\GibbsExcessVPSSTP.h" />
+    <ClInclude Include="..\include\cantera\thermo\HMWSoln.h" />
+    <ClInclude Include="..\include\cantera\thermo\IdealGasPhase.h" />
+    <ClInclude Include="..\include\cantera\thermo\IdealMolalSoln.h" />
+    <ClInclude Include="..\include\cantera\thermo\IdealSolidSolnPhase.h" />
+    <ClInclude Include="..\include\cantera\thermo\IdealSolnGasVPSS.h" />
+    <ClInclude Include="..\include\cantera\thermo\IonsFromNeutralVPSSTP.h" />
+    <ClInclude Include="..\include\cantera\thermo\LatticePhase.h" />
+    <ClInclude Include="..\include\cantera\thermo\LatticeSolidPhase.h" />
+    <ClInclude Include="..\include\cantera\thermo\MargulesVPSSTP.h" />
+    <ClInclude Include="..\include\cantera\thermo\MaskellSolidSolnPhase.h" />
+    <ClInclude Include="..\include\cantera\thermo\MetalPhase.h" />
+    <ClInclude Include="..\include\cantera\thermo\MetalSHEelectrons.h" />
+    <ClInclude Include="..\include\cantera\thermo\MineralEQ3.h" />
+    <ClInclude Include="..\include\cantera\thermo\MixedSolventElectrolyte.h" />
+    <ClInclude Include="..\include\cantera\thermo\MixtureFugacityTP.h" />
+    <ClInclude Include="..\include\cantera\thermo\mix_defs.h" />
+    <ClInclude Include="..\include\cantera\thermo\MolalityVPSSTP.h" />
+    <ClInclude Include="..\include\cantera\thermo\MolarityIonicVPSSTP.h" />
+    <ClInclude Include="..\include\cantera\thermo\Mu0Poly.h" />
+    <ClInclude Include="..\include\cantera\thermo\Nasa9Poly1.h" />
+    <ClInclude Include="..\include\cantera\thermo\Nasa9PolyMultiTempRegion.h" />
+    <ClInclude Include="..\include\cantera\thermo\NasaPoly1.h" />
+    <ClInclude Include="..\include\cantera\thermo\NasaPoly2.h" />
+    <ClInclude Include="..\include\cantera\thermo\PDSS.h" />
+    <ClInclude Include="..\include\cantera\thermo\PDSS_ConstVol.h" />
+    <ClInclude Include="..\include\cantera\thermo\PDSS_HKFT.h" />
+    <ClInclude Include="..\include\cantera\thermo\PDSS_IdealGas.h" />
+    <ClInclude Include="..\include\cantera\thermo\PDSS_IonsFromNeutral.h" />
+    <ClInclude Include="..\include\cantera\thermo\PDSS_SSVol.h" />
+    <ClInclude Include="..\include\cantera\thermo\PDSS_Water.h" />
+    <ClInclude Include="..\include\cantera\thermo\Phase.h" />
+    <ClInclude Include="..\include\cantera\thermo\PhaseCombo_Interaction.h" />
+    <ClInclude Include="..\include\cantera\thermo\PseudoBinaryVPSSTP.h" />
+    <ClInclude Include="..\include\cantera\thermo\PureFluidPhase.h" />
+    <ClInclude Include="..\include\cantera\thermo\RedlichKisterVPSSTP.h" />
+    <ClInclude Include="..\include\cantera\thermo\RedlichKwongMFTP.h" />
+    <ClInclude Include="..\include\cantera\thermo\SemiconductorPhase.h" />
+    <ClInclude Include="..\include\cantera\thermo\ShomatePoly.h" />
+    <ClInclude Include="..\include\cantera\thermo\SimpleThermo.h" />
+    <ClInclude Include="..\include\cantera\thermo\SingleSpeciesTP.h" />
+    <ClInclude Include="..\include\cantera\thermo\Species.h" />
+    <ClInclude Include="..\include\cantera\thermo\SpeciesThermo.h" />
+    <ClInclude Include="..\include\cantera\thermo\SpeciesThermoFactory.h" />
+    <ClInclude Include="..\include\cantera\thermo\SpeciesThermoInterpType.h" />
+    <ClInclude Include="..\include\cantera\thermo\SpeciesThermoMgr.h" />
+    <ClInclude Include="..\include\cantera\thermo\speciesThermoTypes.h" />
+    <ClInclude Include="..\include\cantera\thermo\StatMech.h" />
+    <ClInclude Include="..\include\cantera\thermo\StoichSubstance.h" />
+    <ClInclude Include="..\include\cantera\thermo\StoichSubstanceSSTP.h" />
+    <ClInclude Include="..\include\cantera\thermo\SurfPhase.h" />
+    <ClInclude Include="..\include\cantera\thermo\ThermoFactory.h" />
+    <ClInclude Include="..\include\cantera\thermo\ThermoPhase.h" />
+    <ClInclude Include="..\include\cantera\thermo\VPSSMgr.h" />
+    <ClInclude Include="..\include\cantera\thermo\VPSSMgr_ConstVol.h" />
+    <ClInclude Include="..\include\cantera\thermo\VPSSMgr_General.h" />
+    <ClInclude Include="..\include\cantera\thermo\VPSSMgr_IdealGas.h" />
+    <ClInclude Include="..\include\cantera\thermo\VPSSMgr_Water_ConstVol.h" />
+    <ClInclude Include="..\include\cantera\thermo\VPSSMgr_Water_HKFT.h" />
+    <ClInclude Include="..\include\cantera\thermo\VPStandardStateTP.h" />
+    <ClInclude Include="..\include\cantera\thermo\WaterProps.h" />
+    <ClInclude Include="..\include\cantera\thermo\WaterPropsIAPWS.h" />
+    <ClInclude Include="..\include\cantera\thermo\WaterPropsIAPWSphi.h" />
+    <ClInclude Include="..\include\cantera\thermo\WaterSSTP.h" />
+    <ClInclude Include="..\include\cantera\tpx\Sub.h" />
+    <ClInclude Include="..\include\cantera\tpx\utils.h" />
+    <ClInclude Include="..\include\cantera\transport.h" />
+    <ClInclude Include="..\include\cantera\transport\AqueousTransport.h" />
+    <ClInclude Include="..\include\cantera\transport\DustyGasTransport.h" />
+    <ClInclude Include="..\include\cantera\transport\GasTransport.h" />
+    <ClInclude Include="..\include\cantera\transport\HighPressureGasTransport.h" />
+    <ClInclude Include="..\include\cantera\transport\LiquidTranInteraction.h" />
+    <ClInclude Include="..\include\cantera\transport\LiquidTransport.h" />
+    <ClInclude Include="..\include\cantera\transport\LiquidTransportData.h" />
+    <ClInclude Include="..\include\cantera\transport\LiquidTransportParams.h" />
+    <ClInclude Include="..\include\cantera\transport\LTPspecies.h" />
+    <ClInclude Include="..\include\cantera\transport\MixTransport.h" />
+    <ClInclude Include="..\include\cantera\transport\MultiTransport.h" />
+    <ClInclude Include="..\include\cantera\transport\PecosTransport.h" />
+    <ClInclude Include="..\include\cantera\transport\SimpleTransport.h" />
+    <ClInclude Include="..\include\cantera\transport\SolidTransport.h" />
+    <ClInclude Include="..\include\cantera\transport\SolidTransportData.h" />
+    <ClInclude Include="..\include\cantera\transport\Tortuosity.h" />
+    <ClInclude Include="..\include\cantera\transport\TransportBase.h" />
+    <ClInclude Include="..\include\cantera\transport\TransportFactory.h" />
+    <ClInclude Include="..\include\cantera\transport\TransportParams.h" />
+    <ClInclude Include="..\include\cantera\transport\WaterTransport.h" />
+    <ClInclude Include="..\include\cantera\zerodim.h" />
+    <ClInclude Include="..\include\cantera\zerod\ConstPressureReactor.h" />
+    <ClInclude Include="..\include\cantera\zerod\flowControllers.h" />
+    <ClInclude Include="..\include\cantera\zerod\FlowDevice.h" />
+    <ClInclude Include="..\include\cantera\zerod\FlowReactor.h" />
+    <ClInclude Include="..\include\cantera\zerod\IdealGasConstPressureReactor.h" />
+    <ClInclude Include="..\include\cantera\zerod\IdealGasReactor.h" />
+    <ClInclude Include="..\include\cantera\zerod\Reactor.h" />
+    <ClInclude Include="..\include\cantera\zerod\ReactorBase.h" />
+    <ClInclude Include="..\include\cantera\zerod\ReactorFactory.h" />
+    <ClInclude Include="..\include\cantera\zerod\ReactorNet.h" />
+    <ClInclude Include="..\include\cantera\zerod\Reservoir.h" />
+    <ClInclude Include="..\include\cantera\zerod\Wall.h" />
+    <ClInclude Include="apps\mdp_allo.h" />
+    <ClInclude Include="apps\tok_input_util.h" />
+    <ClInclude Include="base\application.h" />
+    <ClInclude Include="base\units.h" />
+    <ClInclude Include="clib\Cabinet.h" />
+    <ClInclude Include="clib\clib_defs.h" />
+    <ClInclude Include="clib\ct.h" />
+    <ClInclude Include="clib\ctbdry.h" />
+    <ClInclude Include="clib\ctfunc.h" />
+    <ClInclude Include="clib\ctmultiphase.h" />
+    <ClInclude Include="clib\ctonedim.h" />
+    <ClInclude Include="clib\ctreactor.h" />
+    <ClInclude Include="clib\ctrpath.h" />
+    <ClInclude Include="clib\ctsurf.h" />
+    <ClInclude Include="clib\ctxml.h" />
+    <ClInclude Include="equil\PropertyCalculator.h" />
+    <ClInclude Include="matlab\ctmatutils.h" />
+    <ClInclude Include="matlab\mllogger.h" />
+    <ClInclude Include="numerics\CVodeInt.h" />
+    <ClInclude Include="numerics\lapack.h" />
+    <ClInclude Include="thermo\NasaThermo.h" />
+    <ClInclude Include="thermo\ShomateThermo.h" />
+    <ClInclude Include="thermo\VPSSMgrFactory.h" />
+    <ClInclude Include="tpx\CarbonDioxide.h" />
+    <ClInclude Include="tpx\Heptane.h" />
+    <ClInclude Include="tpx\HFC134a.h" />
+    <ClInclude Include="tpx\Hydrogen.h" />
+    <ClInclude Include="tpx\lk.h" />
+    <ClInclude Include="tpx\Methane.h" />
+    <ClInclude Include="tpx\Nitrogen.h" />
+    <ClInclude Include="tpx\Oxygen.h" />
+    <ClInclude Include="tpx\RedlichKwong.h" />
+    <ClInclude Include="tpx\Water.h" />
+    <ClInclude Include="transport\MMCollisionInt.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -110,6 +110,8 @@ void StFlow::resize(size_t ncomponents, size_t points)
     m_enth.resize(m_points, 0.0);
     m_visc.resize(m_points, 0.0);
     m_tcon.resize(m_points, 0.0);
+	m_grad_T.resize(m_points, 0.0);
+	viscTurb.resize(m_points, 0.0);
 
     if (m_transport_option ==  c_Mixav_Transport) {
         m_diff.resize(m_nsp*m_points);
@@ -185,7 +187,36 @@ void StFlow::setGas(const doublereal* x, size_t j)
     const doublereal* yy = x + m_nv*j + c_offset_Y;
     m_thermo->setMassFractions_NoNorm(yy);
     m_thermo->setPressure(m_press);
+	m_grad_T.resize(m_points, 0.0);
+	viscTurb.resize(m_points, 0.0);
+
+	if (j==0){
+	m_grad_T[j]=0;
+	}else{
+	m_grad_T[j] = (T(x,j)-T(x,j-1))/(m_z[j]-m_z[j-1]);
+	}
+
+	viscTurb[j] = (((m_rho[j] * 0.09*m_TKE*m_TKE)/m_ED));
+	TempPrime = sqrt((2.86*viscTurb[j]*((m_grad_T[j]*m_grad_T[j])))/(2.0 * m_rho[j] *(m_ED/m_TKE)));
+		
+	TurbulentKinetics* turbKin = dynamic_cast<TurbulentKinetics*>(m_kin);
+    if (turbKin) {
+        turbKin->setTprime(TempPrime);
+		}
 }
+
+void StFlow::getTgrad(doublereal* Tgrad){
+	for (size_t k = 0; k < m_points; k++) {
+    	Tgrad[k] = setTempGrad(k);
+    }
+}
+
+void StFlow::getviscTurb(doublereal* viscTurb){
+	for (size_t k = 0; k < m_points; k++) {
+    	viscTurb[k] = setviscTurb(k);
+    }
+}
+
 
 void StFlow::setGasAtMidpoint(const doublereal* x, size_t j)
 {
@@ -197,17 +228,6 @@ void StFlow::setGasAtMidpoint(const doublereal* x, size_t j)
     }
     m_thermo->setMassFractions_NoNorm(DATA_PTR(m_ybar));
     m_thermo->setPressure(m_press);
-	doublereal viscTurb, grad_T_2,dtdzj,TempPrime;	
-
-	dtdzj = dTdz(x,j);
-	grad_T_2 = pow(dtdzj,2.0);
-	viscTurb = (((m_rho[j] * 0.09*m_TKE*m_TKE)/m_ED));
-	TempPrime = sqrt((2.86*viscTurb*((grad_T_2)))/(2.0 * m_rho[j] *(m_ED/m_TKE)));
-
-	TurbulentKinetics* turbKin = dynamic_cast<TurbulentKinetics*>(m_kin);
-    if (turbKin) {
-        turbKin->setTprime(TempPrime);
-    }
 
 }
 

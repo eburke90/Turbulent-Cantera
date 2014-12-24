@@ -120,7 +120,7 @@ class FlameBase(Sim1D):
     @property
     def T(self):
         """ Array containing the temperature [K] at each grid point. """
-        return self.profile(self.flame, 'T')
+        return self.profile(self.flame, 'T')	
 
     @property
     def u(self):
@@ -246,7 +246,7 @@ def _array_property(attr, size=None):
     return property(getter, doc=doc)
 
 # Add scalar properties to FlameBase
-for attr in ['density', 'density_mass', 'density_mole', 'volume_mass',
+for attr in ['density','density_mass', 'density_mole', 'volume_mass',
              'volume_mole', 'int_energy_mole', 'int_energy_mass', 'h',
              'enthalpy_mole', 'enthalpy_mass', 's', 'entropy_mole',
              'entropy_mass', 'g', 'gibbs_mole', 'gibbs_mass', 'cv',

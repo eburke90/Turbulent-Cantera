@@ -19,7 +19,7 @@ namespace Cantera
 
 //! Turbulent reaction rate correction coefficient
 
-static doublereal Cc(doublereal m_b,doublereal m_E,doublereal recipT,doublereal TprimeOverT) {
+static doublereal Cc(doublereal m_b , doublereal m_E,doublereal recipT,doublereal TprimeOverT) {
 
 		doublereal R_const = 1.9872041, t1,t2,t3,t4,t5,t6,t7, f=1;
 		doublereal recipT2 = pow(recipT,2), m_E2 = pow(m_E,2), TPOT2 = pow(TprimeOverT,2), R2 = pow(1.9872041,2);

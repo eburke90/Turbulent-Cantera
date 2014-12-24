@@ -340,16 +340,30 @@ cdef class _FlowBase(Domain1D):
             return self.flow.pressure()
         def __set__(self, P):
             self.flow.setPressure(P)
-		
+
     property TKE:
         """ Turbulent Kinetic Energy """
         def __set__(self, TKE):
             self.flow.setTKE(TKE)
-
+			
     property ED:
         """ Turbulent Dissipation """
         def __set__(self, ED):
-            self.flow.setED(ED)			
+            self.flow.setED(ED)
+
+    property gradT:
+        """The chemical potentials of all species [J/kmol]."""
+        def __get__(self):
+            cdef np.ndarray[np.double_t, ndim=1] data = np.empty(self.n_points)
+            self.flow.getTgrad(&data[0])
+            return data
+
+    property ViscTurb:
+        """The chemical potentials of all species [J/kmol]."""
+        def __get__(self):
+            cdef np.ndarray[np.double_t, ndim=1] data = np.empty(self.n_points)
+            self.flow.getviscTurb(&data[0])
+            return data				
 
     def set_transport(self, _SolutionBase phase):
         """
@@ -413,6 +427,7 @@ cdef class FreeFlow(_FlowBase):
         gas = getIdealGasPhase(thermo)
         self.flow = <CxxStFlow*>(new CxxFreeFlame(gas, thermo.n_species, 2))
 
+		
 
 cdef class AxisymmetricStagnationFlow(_FlowBase):
     """
@@ -588,6 +603,26 @@ cdef class Sim1D:
             data[j] = self.sim.value(idom, kcomp, j)
         return data
 
+    def profile(self, flow, component):
+        """
+        Spatial profile of one component in one domain.
+
+        :param domain:
+            Domain1D object, name, or index 
+        :param component:
+            component name or index
+
+        >>> T = s.profile(flow, 'T')
+        """
+        idom, kcomp = self._get_indices(flow, component)
+        dom = self.flow[idom]
+        cdef int j
+        cdef np.ndarray[np.double_t, ndim=1] data = np.empty(dom.n_points)
+        for j in range(dom.n_points):
+            data[j] = self.sim.value(idom, kcomp, j)
+        return data
+		
+		
     def set_profile(self, domain, component, positions, values):
         """
         Set an initial estimate for a profile of one component in one domain.

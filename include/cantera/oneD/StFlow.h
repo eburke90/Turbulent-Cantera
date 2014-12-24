@@ -114,12 +114,23 @@ public:
         return m_TKE;
     }
 
-   //! Set the turbulent dissipation 
+	//! Set the turbulent dissipation 
     void setED(doublereal ED) {
         m_ED = ED;
     }
+	void getTgrad(doublereal* Tgrad);
 
-    //! The current turbulent dissipation
+    doublereal setTempGrad(size_t j) const {
+        return m_grad_T[j];
+    }
+
+	void getviscTurb(doublereal* viscTurb);
+
+    doublereal setviscTurb(size_t j) const {
+        return viscTurb[j];
+    }
+
+	//! The current turbulent dissipation
     doublereal ED() const {
         return m_ED;
     }
@@ -473,11 +484,16 @@ protected:
 
     // surface
     doublereal m_surface_T;
+	doublereal m_tempgrad;
 
     doublereal m_press;        // pressure
 	//Turbulent Kinetic Energy
 	doublereal m_TKE;
-
+	//Temperature Gradient
+	vector_fp m_grad_T;
+	vector_fp viscTurb;
+	doublereal TempPrime;
+		
 	//Epsilon
 	doublereal m_ED;
 	
