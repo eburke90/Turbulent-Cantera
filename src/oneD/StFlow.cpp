@@ -112,6 +112,9 @@ void StFlow::resize(size_t ncomponents, size_t points)
     m_tcon.resize(m_points, 0.0);
 	m_grad_T.resize(m_points, 0.0);
 	viscTurb.resize(m_points, 0.0);
+	TempP.resize(m_points, 0.0);
+	m_bar.resize(m_points, 0.0);
+	Sigma2.resize(m_points, 0.0);
 
     if (m_transport_option ==  c_Mixav_Transport) {
         m_diff.resize(m_nsp*m_points);
@@ -189,15 +192,49 @@ void StFlow::setGas(const doublereal* x, size_t j)
     m_thermo->setPressure(m_press);
 	m_grad_T.resize(m_points, 0.0);
 	viscTurb.resize(m_points, 0.0);
+	TempP.resize(m_points, 0.0);
+	m_bar.resize(m_points, 0.0);
+	Sigma2.resize(m_points, 0.0);
 
+	doublereal rho_grad, u_grad,A,B,C,D,F,G,I,H;
+	viscTurb[j] = m_rho[j] * 0.09* (m_TKE*m_TKE/m_ED);
 	if (j==0){
-	m_grad_T[j]=0;
+	TempP[j]=0.5;
+	A = m_rho[j]*u(x,j);
+
+	}else if (j==1){
+	TempP[j]=0.5;
+	m_grad_T[j] = (T(x,j)-T(x,j-1))/(m_z[j]-m_z[j-1]);
+	rho_grad = (m_rho[j]-m_rho[j-1])/(m_z[j]-m_z[j-1]);
+	u_grad = (u(x,j)-u(x,j-1))/(m_z[j]-m_z[j-1]);
+
+	A = m_rho[j]*u(x,j);
+	B = 0;
+	C = (m_rho[j]*u_grad)+(u(x,j)*rho_grad)+(2*m_rho[j]*(m_ED/m_TKE));
+	D = -2.85*viscTurb[j]*m_grad_T[j]*m_grad_T[j];
+	F =TempP[j-1];
+	G = TempP[j-2];
+	H = (m_z[j]-m_z[j-1]);
+
 	}else{
 	m_grad_T[j] = (T(x,j)-T(x,j-1))/(m_z[j]-m_z[j-1]);
+	rho_grad = (m_rho[j]-m_rho[j-1])/(m_z[j]-m_z[j-1]);
+	u_grad = (u(x,j)-u(x,j-1))/(m_z[j]-m_z[j-1]);
+
+	A = m_rho[j]*u(x,j);
+	B = 0;
+	C = (m_rho[j]*u_grad)+(u(x,j)*rho_grad)+(2*m_rho[j]*(m_ED/m_TKE));
+	D = -2.85*viscTurb[j]*m_grad_T[j]*m_grad_T[j];
+	F =Sigma2[j-1];
+	G = Sigma2[j-2];
+	H = (m_z[j]-m_z[j-1]);
+	I = (m_z[j-1]-m_z[j-2]);
+	Sigma2[j] = (((F*A*I)+(F*G*B)-(D*I*H))/((A*I)+((F*B*I)/H)+(C*H*I)));
+	TempP[j] = (sqrt(Sigma2[j]))*0.75;
 	}
 
-	viscTurb[j] = (((m_rho[j] * 0.09*m_TKE*m_TKE)/m_ED));
-	TempPrime = sqrt((2.86*viscTurb[j]*((m_grad_T[j]*m_grad_T[j])))/(2.0 * m_rho[j] *(m_ED/m_TKE)));
+	TempPrime = TempP[j];// sqrt((2.86*viscTurb[j]*((m_grad_T[j]*m_grad_T[j])))/(2.0 * m_rho[j] *(m_ED/m_TKE)));
+	//TempP[j] =TempPrime;// sqrt((2.86*viscTurb[j]*(m_grad_T[j]*m_grad_T[j]))/(2.0 * m_rho[j] *(m_ED/m_TKE)));
 		
 	TurbulentKinetics* turbKin = dynamic_cast<TurbulentKinetics*>(m_kin);
     if (turbKin) {
@@ -214,6 +251,12 @@ void StFlow::getTgrad(doublereal* Tgrad){
 void StFlow::getviscTurb(doublereal* viscTurb){
 	for (size_t k = 0; k < m_points; k++) {
     	viscTurb[k] = setviscTurb(k);
+    }
+}
+
+void StFlow::getTempP(doublereal* TempP){
+	for (size_t k = 0; k < m_points; k++) {
+    	TempP[k] = setTempP(k);
     }
 }
 
@@ -376,7 +419,7 @@ void StFlow::eval(size_t jg, doublereal* xg,
             //   = M_k\omega_k
             //
             //-------------------------------------------------
-            getWdot(x,j);
+			getWdot(x,j);
 
 			//Calculate the Eddy Dissapation Concept Values
 
@@ -835,7 +878,7 @@ XML_Node& StFlow::save(XML_Node& o, const doublereal* const sol)
     vector_fp values(nPoints());
     for (size_t i = 0; i < nPoints(); i++) {
         values[i] = m_do_energy[i];
-    }
+    }               
     addNamedFloatArray(flow, "energy_enabled", nPoints(), &values[0]);
 
     values.resize(m_nsp);

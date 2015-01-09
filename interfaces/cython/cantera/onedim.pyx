@@ -363,6 +363,13 @@ cdef class _FlowBase(Domain1D):
         def __get__(self):
             cdef np.ndarray[np.double_t, ndim=1] data = np.empty(self.n_points)
             self.flow.getviscTurb(&data[0])
+            return data	
+			
+    property TempP:
+        """The chemical potentials of all species [J/kmol]."""
+        def __get__(self):
+            cdef np.ndarray[np.double_t, ndim=1] data = np.empty(self.n_points)
+            self.flow.getTempP(&data[0])
             return data				
 
     def set_transport(self, _SolutionBase phase):

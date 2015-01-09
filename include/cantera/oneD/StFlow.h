@@ -130,6 +130,12 @@ public:
         return viscTurb[j];
     }
 
+	void getTempP(doublereal* viscTurb);
+
+    doublereal setTempP(size_t j) const {
+        return TempP[j];
+    }
+
 	//! The current turbulent dissipation
     doublereal ED() const {
         return m_ED;
@@ -493,7 +499,10 @@ protected:
 	vector_fp m_grad_T;
 	vector_fp viscTurb;
 	doublereal TempPrime;
-		
+	vector_fp TempP;
+	vector_fp m_bar;
+	vector_fp Sigma2;
+
 	//Epsilon
 	doublereal m_ED;
 	

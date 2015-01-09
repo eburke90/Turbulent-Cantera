@@ -182,14 +182,15 @@ class FlameBase(Sim1D):
         T = self.T
         u = self.u
         V = self.V
+        Visc = self.flame.ViscTurb
+        TPrime = self.flame.TempP
 
         csvfile = open(filename, 'w')
         writer = csv.writer(csvfile)
-        writer.writerow(['z (m)', 'u (m/s)', 'V (1/s)',
-                         'T (K)', 'rho (kg/m3)'] + self.gas.species_names)
+        writer.writerow(['z (m)','Tprime (K)', 'u (m/s)', 'V (1/s)','T (K)','Turb Visc (Pa s)', 'rho (kg/m3)'] + self.gas.species_names)
         for n in range(self.flame.n_points):
             self.set_gas_state(n)
-            writer.writerow([z[n], u[n], V[n], T[n], self.gas.density] +
+            writer.writerow([z[n], TPrime[n], u[n], V[n], T[n],Visc[n], self.gas.density] +
                             list(getattr(self.gas, species)))
         csvfile.close()
         if not quiet:
