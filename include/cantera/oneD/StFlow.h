@@ -24,7 +24,8 @@ const size_t c_offset_U = 0;    // axial velocity
 const size_t c_offset_V = 1;    // strain rate
 const size_t c_offset_T = 2;    // temperature
 const size_t c_offset_L = 3;    // (1/r)dP/dr
-const size_t c_offset_Y = 4;    // mass fractions
+const size_t c_offset_Y = 5;    // mass fractions
+const size_t c_offset_TT = 4;
 
 // Transport option flags
 const int c_Mixav_Transport = 0;
@@ -395,6 +396,17 @@ protected:
         return prevSoln(c_offset_T, j);
     }
 
+	doublereal TT(const doublereal* x, size_t j) const {
+    return x[5];
+    }
+    doublereal& TT(doublereal* x, size_t j) {
+        return x[index(c_offset_TT, j)];
+    }
+
+    doublereal TT_prev(size_t j) const {
+        return prevSoln(c_offset_TT, j);
+    }
+
     doublereal rho_u(const doublereal* x, size_t j) const {
         return m_rho[j]*x[index(c_offset_U, j)];
     }
@@ -497,6 +509,7 @@ protected:
 	doublereal m_TKE;
 	//Temperature Gradient
 	vector_fp m_grad_T;
+
 	vector_fp viscTurb;
 	doublereal TempPrime;
 	vector_fp TempP;
