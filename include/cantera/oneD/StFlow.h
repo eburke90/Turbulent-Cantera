@@ -119,18 +119,19 @@ public:
     void setED(doublereal ED) {
         m_ED = ED;
     }
+	// Getter for Temperature Gradient
 	void getTgrad(doublereal* Tgrad);
 
     doublereal setTempGrad(size_t j) const {
         return m_grad_T[j];
     }
-
+	// Getter for Turbulent Viscosity
 	void getviscTurb(doublereal* viscTurb);
 
     doublereal setviscTurb(size_t j) const {
         return viscTurb[j];
     }
-
+	// Getter for Temperature Fluctuations
 	void getTempP(doublereal* viscTurb);
 
     doublereal setTempP(size_t j) const {
@@ -393,11 +394,12 @@ protected:
         return x[index(c_offset_T, j)];
     }
     doublereal T_prev(size_t j) const {
+
         return prevSoln(c_offset_T, j);
     }
 
 	doublereal TT(const doublereal* x, size_t j) const {
-    return x[5];
+    return x[index(c_offset_TT, j)];
     }
     doublereal& TT(doublereal* x, size_t j) {
         return x[index(c_offset_TT, j)];

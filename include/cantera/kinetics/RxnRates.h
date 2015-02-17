@@ -21,7 +21,7 @@ namespace Cantera
 
 static doublereal Cc(doublereal m_b , doublereal m_E,doublereal recipT,doublereal TprimeOverT) {
 
-		doublereal R_const = 1.9872041, t1,t2,t3,t4,t5,t6,t7;
+		doublereal R_const = 1.9872041, t1,t2,t3,t4,t5,t6,t7,ta;
 		doublereal recipT2 = pow(recipT,2), m_E2 = pow(m_E,2), TPOT2 = pow(TprimeOverT,2), R2 = pow(1.9872041,2);
 		doublereal recipT3 = pow(recipT,3), m_E3 = pow(m_E,3), TPOT3 = pow(TprimeOverT,3), R3 = pow(1.9872041,3);
 		doublereal recipT4 = pow(recipT,4), m_E4 = pow(m_E,4), TPOT4 = pow(TprimeOverT,4), R4 = pow(1.9872041,4);
@@ -36,7 +36,8 @@ static doublereal Cc(doublereal m_b , doublereal m_E,doublereal recipT,doublerea
 		t5 = ((((((R5*m_b*(m_b-1)*(m_b-2))*(m_b-3)*(m_b-4))+(5*m_E*R4*(m_b-1)*(m_b-2))*(m_b-3)*(m_b-4)*recipT)+(10*m_E2*R3*(m_b-2))*(m_b-3)*(m_b-4)*recipT2)+(10*m_E3*R2*(m_b-3)*(m_b-4)*recipT3)+(5*m_E4*R_const*(m_b-4)*recipT4)+(m_E5*recipT5))/(120*R5))*TPOT5;
 		t6 = ((((((R6*m_b*(m_b-1)*(m_b-2))*(m_b-3)*(m_b-4)*(m_b-5))+(6*m_E*R5*(m_b-1)*(m_b-2))*(m_b-3)*(m_b-4)*(m_b-5)*recipT)+(15*m_E2*R4*(m_b-2))*(m_b-3)*(m_b-4)*(m_b-5)*recipT2)+(20*m_E3*R3*(m_b-3)*(m_b-4)*(m_b-5)*recipT3)+(15*m_E4*R2*(m_b-4)*(m_b-5)*recipT4)+(6*m_E5*R_const*(m_b-5)*recipT5)+(m_E6*recipT6))/(720*R6))*TPOT6;	
 		t7 = ((((((R7*m_b*(m_b-1)*(m_b-2))*(m_b-3)*(m_b-4)*(m_b-5)*(m_b-6))+(7*m_E*R6*(m_b-1)*(m_b-2))*(m_b-3)*(m_b-4)*(m_b-5)*(m_b-6)*recipT)+(21*m_E2*R5*(m_b-2))*(m_b-3)*(m_b-4)*(m_b-5)*(m_b-6)*recipT2)+(35*m_E3*R4*(m_b-3)*(m_b-4)*(m_b-5)*(m_b-6)*recipT3)+(35*m_E4*R3*(m_b-4)*(m_b-5)*(m_b-6)*recipT4)+(21*m_E5*R2*(m_b-5)*(m_b-6)*recipT5))+(7*m_E6*R_const*(m_b-6)*recipT6)+(m_E7*recipT7))/(5040*R7)*TPOT7;	
-		
+		ta = (((R2*m_b*(m_b))-(R2*m_b)+(2*m_E*R_const*(m_b-1)*recipT)+(m_E2*recipT2))/(4*R2))*TPOT2;;
+
 		doublereal CorrectionCoefficient = 1+t1+t2+t3+t4+t5+t6+t7;
 
 		if (CorrectionCoefficient>1.e5){

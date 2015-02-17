@@ -199,11 +199,11 @@ void StFlow::setGas(const doublereal* x, size_t j)
 	doublereal rho_grad, u_grad,A,B,C,D,F,G,I,H;
 	viscTurb[j] = m_rho[j] * 0.09* (m_TKE*m_TKE/m_ED);
 	if (j==0){
-	TempP[j]=TT(x,j);
+	TempP[j]= TT(x,j);//0.5;
 	A = m_rho[j]*u(x,j);
 
 	}else if (j==1){
-	TempP[j]=TT(x,j);
+	TempP[j]= TT(x,j);//0.5;
 	m_grad_T[j] = (T(x,j)-T(x,j-1))/(m_z[j]-m_z[j-1]);
 	rho_grad = (m_rho[j]-m_rho[j-1])/(m_z[j]-m_z[j-1]);
 	u_grad = (u(x,j)-u(x,j-1))/(m_z[j]-m_z[j-1]);
@@ -216,7 +216,7 @@ void StFlow::setGas(const doublereal* x, size_t j)
 	H = (m_z[j]-m_z[j-1]);
 
 	}else{
-	m_grad_T[j] = 0;//(T(x,j)-T(x,j-1))/(m_z[j]-m_z[j-1]);
+	m_grad_T[j] = (T(x,j)-T(x,j-1))/(m_z[j]-m_z[j-1]);
 	rho_grad = (m_rho[j]-m_rho[j-1])/(m_z[j]-m_z[j-1]);
 	u_grad = (u(x,j)-u(x,j-1))/(m_z[j]-m_z[j-1]);
 
@@ -224,17 +224,17 @@ void StFlow::setGas(const doublereal* x, size_t j)
 	B = 0;
 	C = (m_rho[j]*u_grad)+(u(x,j)*rho_grad)+(2*m_rho[j]*(m_ED/m_TKE));
 	D = -2.85*viscTurb[j]*m_grad_T[j]*m_grad_T[j];
-	F =Sigma2[j-1];
+	F = Sigma2[j-1];
 	G = Sigma2[j-2];
 	H = (m_z[j]-m_z[j-1]);
 	I = (m_z[j-1]-m_z[j-2]);
+	
 	Sigma2[j] = (((F*A*I)+(F*G*B)-(D*I*H))/((A*I)+((F*B*I)/H)+(C*H*I)));
-	TempP[j] = TT(x,j);//(sqrt(Sigma2[j]))*0.75;
+
+	TempP[j] = TT(x,j);//(sqrt(Sigma2[j]))*0.084;
 	}
 
-	TempPrime = TempP[j];// sqrt((2.86*viscTurb[j]*((m_grad_T[j]*m_grad_T[j])))/(2.0 * m_rho[j] *(m_ED/m_TKE)));
-	//TempP[j] =TempPrime;// sqrt((2.86*viscTurb[j]*(m_grad_T[j]*m_grad_T[j]))/(2.0 * m_rho[j] *(m_ED/m_TKE)));
-		
+	TempPrime = (sqrt(Sigma2[j]))*0.084;
 	TurbulentKinetics* turbKin = dynamic_cast<TurbulentKinetics*>(m_kin);
     if (turbKin) {
         turbKin->setTprime(TempPrime);
@@ -507,12 +507,13 @@ void StFlow::eval(size_t jg, doublereal* xg,
            dtdzjt = dTdz(x,j);
            sum2t *= GasConstant * dtdzjt;
 
-            rsd[index(c_offset_TT, j)]   = 4+4;
-                //- m_cp[j]*rho_u(x,j)*dtdzjt
-                //- divHeatFlux(x,j) - (sumt*EDC) - sum2t;
-           // rsd[index(c_offset_TT, j)] /= (m_rho[j]*m_cp[j]);
+            rsd[index(c_offset_TT, j)]   = GasConstant * T(x,j);
+                - m_cp[j]*rho_u(x,j)*dtdzjt
+                - divHeatFlux(x,j) - (sumt*EDC) - sum2t;
+            rsd[index(c_offset_TT, j)] /= (m_rho[j]*m_cp[j]);
+			rsd[index(c_offset_TT, j)] = 44;
 
-           // rsd[index(c_offset_TT, j)] -= rdt*(TT(x,j) - TT_prev(j));
+            //rsd[index(c_offset_TT, j)] -= rdt*(TT(x,j) - TT_prev(j));
             diag[index(c_offset_TT, j)] = 1;
         }
     }
@@ -665,6 +666,8 @@ string StFlow::componentName(size_t n) const
         return "T";
     case 3:
         return "lambda";
+	case 4:
+		return "T_Prime";
     default:
         if (n >= c_offset_Y && n < (c_offset_Y + m_nsp)) {
             return m_thermo->speciesName(n - c_offset_Y);
@@ -684,6 +687,8 @@ size_t StFlow::componentIndex(const std::string& name) const
         return 2;
     } else if (name=="lambda") {
         return 3;
+    } else if (name=="T_Prime") {
+        return 4;
     } else {
         for (size_t n=c_offset_Y; n<m_nsp+c_offset_Y; n++) {
             if (componentName(n)==name) {
@@ -907,7 +912,7 @@ XML_Node& StFlow::save(XML_Node& o, const doublereal* const sol)
     }               
     addNamedFloatArray(flow, "energy_enabled", nPoints(), &values[0]);
 
-    values.resize(m_nsp+1);
+    values.resize(m_nsp);
     for (size_t i = 0; i < m_nsp; i++) {
         values[i] = m_do_species[i];
     }

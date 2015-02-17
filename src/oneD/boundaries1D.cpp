@@ -6,6 +6,7 @@
 #include "cantera/oneD/Inlet1D.h"
 #include "cantera/oneD/OneDim.h"
 #include "cantera/base/ctml.h"
+#include "cantera/oneD/StFlow.h"
 
 using namespace std;
 
@@ -46,7 +47,7 @@ void Bdry1D::_init(size_t n)
             m_left_nv = m_flow_left->nComponents();
             m_left_points = m_flow_left->nPoints();
             m_left_loc = container().start(m_index-1);
-            m_left_nsp = m_left_nv - 4;
+            m_left_nsp = m_left_nv - c_offset_Y;
             m_phase_left = &m_flow_left->phase();
         } else
             throw CanteraError("Bdry1D::init",
@@ -135,7 +136,7 @@ void Inlet1D::init()
     }
 
     // components = u, V, T, lambda, + mass fractions
-    m_nsp = m_flow->nComponents() - 4;
+    m_nsp = m_flow->nComponents() - c_offset_Y;
     m_yin.resize(m_nsp, 0.0);
     if (m_xstr != "") {
         setMoleFractions(m_xstr);
@@ -194,7 +195,7 @@ void Inlet1D::eval(size_t jg, doublereal* xg, doublereal* rg,
 
         // add the convective term to the species residual equations
         for (size_t k = 1; k < m_nsp; k++) {
-            rb[4+k] += x[0]*m_yin[k];
+            rb[c_offset_Y+k] += x[0]*m_yin[k];
         }
 
         // if the flow is a freely-propagating flame, mdot is not
@@ -216,7 +217,7 @@ void Inlet1D::eval(size_t jg, doublereal* xg, doublereal* rg,
         rb[2] -= x[1]; // T
         rb[0] += x[0]; // u
         for (size_t k = 1; k < m_nsp; k++) {
-            rb[4+k] += x[0]*(m_yin[k]);
+            rb[c_offset_Y+k] += x[0]*(m_yin[k]);
         }
     }
 }
@@ -445,7 +446,7 @@ void Outlet1D::eval(size_t jg, doublereal* xg, doublereal* rg, integer* diagg,
         db = diag + 1;
         rb[0] = xb[3];
         rb[2] = xb[2] - xb[2 + nc];
-        for (k = 4; k < nc; k++) {
+        for (k = c_offset_Y; k < nc; k++) {
             rb[k] = xb[k] - xb[k + nc];
         }
     }
@@ -534,7 +535,7 @@ void OutletRes1D::init()
         throw CanteraError("OutletRes1D::init","no flow!");
     }
 
-    m_nsp = m_flow->nComponents() - 4;
+    m_nsp = m_flow->nComponents() - c_offset_Y;
     m_yres.resize(m_nsp, 0.0);
     if (m_xstr != "") {
         setMoleFractions(m_xstr);
@@ -577,8 +578,8 @@ void OutletRes1D::eval(size_t jg, doublereal* xg, doublereal* rg,
         rb[2] = xb[2] - xb[2 + nc];
 
         // specified mass fractions
-        for (k = 4; k < nc; k++) {
-            rb[k] = xb[k] - m_yres[k-4];
+        for (k = c_offset_Y; k < nc; k++) {
+            rb[k] = xb[k] - m_yres[k-c_offset_Y];
         }
     }
 
@@ -596,7 +597,7 @@ void OutletRes1D::eval(size_t jg, doublereal* xg, doublereal* rg,
         }
         rb[2] = xb[2] - m_temp; // zero dT/dz
         for (k = 5; k < nc; k++) {
-            rb[k] = xb[k] - m_yres[k-4];     // fixed Y
+            rb[k] = xb[k] - m_yres[k-c_offset_Y];     // fixed Y
             db[k] = 0;
         }
     }
@@ -816,7 +817,7 @@ void ReactingSurf1D::eval(size_t jg, doublereal* xg, doublereal* rg,
         xb = x - nc;
         rb[2] = xb[2] - x[0];            // specified T
         for (size_t nl = 1; nl < m_left_nsp; nl++) {
-            rb[4+nl] += m_work[nl]*mwleft[nl];
+            rb[c_offset_Y+nl] += m_work[nl]*mwleft[nl];
         }
     }
 }

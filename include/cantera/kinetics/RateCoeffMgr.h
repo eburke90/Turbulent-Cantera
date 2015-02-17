@@ -86,7 +86,7 @@ public:
 
 	void updateTurb(doublereal T, doublereal logT, doublereal* values, doublereal m_Tprime) {
     doublereal recipT = 1.0/T;
-	doublereal TprimeOverT = m_Tprime*recipT;
+	doublereal TprimeOverT =m_Tprime*recipT;
     for (size_t i = 0; i != m_rates.size(); i++) {
 		values[m_rxn[i]] = m_rates[i].updateTurbulent(logT, recipT, TprimeOverT);
         }
