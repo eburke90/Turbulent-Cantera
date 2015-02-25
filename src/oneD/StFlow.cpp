@@ -231,7 +231,7 @@ void StFlow::setGas(const doublereal* x, size_t j)
 	
 	Sigma2[j] = (((F*A*I)+(F*G*B)-(D*I*H))/((A*I)+((F*B*I)/H)+(C*H*I)));
 
-	TempP[j] = TT(x,j);//(sqrt(Sigma2[j]))*0.084;
+	TempP[j] = (sqrt(Sigma2[j]))*0.084;
 	}
 
 	TempPrime = (sqrt(Sigma2[j]))*0.084;
@@ -379,7 +379,7 @@ void StFlow::eval(size_t jg, doublereal* xg,
             rsd[index(c_offset_V,0)] = V(x,0);
             rsd[index(c_offset_T,0)] = T(x,0);
             rsd[index(c_offset_L,0)] = -rho_u(x,0);
-			rsd[index(c_offset_TT,0)] = T(x,0);
+			rsd[index(c_offset_TT,0)] = TT(x,0);
 
             // The default boundary condition for species is zero
             // flux. However, the boundary object may modify
@@ -422,7 +422,7 @@ void StFlow::eval(size_t jg, doublereal* xg,
 			getWdot(x,j);
 
 			//Calculate the Eddy Dissapation Concept Values
-
+			
 			doublereal  EDC = ((2.1337*(sqrt(sqrt(((m_visc[j]*m_ED)/(m_rho[j]*m_TKE*m_TKE)))))));
 
 			if (EDC>1) {
@@ -489,32 +489,35 @@ void StFlow::eval(size_t jg, doublereal* xg,
             rsd[index(c_offset_L, j)] = lambda(x,j) - lambda(x,j-1);
             diag[index(c_offset_L, j)] = 0;
 
+			//-----------------------------------------------
 			//Dummy Transport
+			//-----------------------------------------------
 
-           // heat release term
-           const vector_fp& h_RT = m_thermo->enthalpy_RT_ref();
-           const vector_fp& cp_R = m_thermo->cp_R_ref();
+          setGas(x,j);
 
-           doublereal sumt = 0.0;
-           doublereal sum2t = 0.0;
-           doublereal flxkt,dtdzjt;
-           for (k = 0; k < m_nsp; k++) {
-           flxkt = 0.5*(m_flux(k,j-1) + m_flux(k,j));
-           sumt += wdot(k,j)*h_RT[k];
-           sum2t += flxkt*cp_R[k]/m_wt[k];
-           }
-           sumt *= GasConstant * T(x,j);
-           dtdzjt = dTdz(x,j);
-           sum2t *= GasConstant * dtdzjt;
+                // heat release term
+                const vector_fp& h_RT = m_thermo->enthalpy_RT_ref();
+                const vector_fp& cp_R = m_thermo->cp_R_ref();
 
-            rsd[index(c_offset_TT, j)]   = GasConstant * T(x,j);
-                - m_cp[j]*rho_u(x,j)*dtdzjt
-                - divHeatFlux(x,j) - (sumt*EDC) - sum2t;
-            rsd[index(c_offset_TT, j)] /= (m_rho[j]*m_cp[j]);
-			rsd[index(c_offset_TT, j)] = 44;
+                sum = 0.0;
+                sum2 = 0.0;
+                doublereal flxk_TT=0;
+                for (k = 0; k < m_nsp; k++) {
+                    flxk_TT = 0.5*(m_flux(k,j-1) + m_flux(k,j));
+                    sum += wdot(k,j)*h_RT[k];
+                    sum2 += flxk_TT*cp_R[k]/m_wt[k];
+                }
+                sum *= GasConstant * T(x,j);
+                dtdzj = dTdz(x,j);
+                sum2 *= GasConstant * dtdzj;
 
-            //rsd[index(c_offset_TT, j)] -= rdt*(TT(x,j) - TT_prev(j));
-            diag[index(c_offset_TT, j)] = 1;
+                rsd[index(c_offset_TT, j)]   =
+                    - m_cp[j]*rho_u(x,j)*dtdzj
+                    - divHeatFlux(x,j) - (sum*EDC) - sum2;
+                rsd[index(c_offset_TT, j)] /= (m_rho[j]*m_cp[j]);
+
+                rsd[index(c_offset_TT, j)] -= rdt*(TT(x,j) - TT_prev(j));
+                diag[index(c_offset_TT, j)] = 1;
         }
     }
 }
@@ -944,6 +947,7 @@ void AxiStagnFlow::evalRightBoundary(doublereal* x, doublereal* rsd,
     rsd[index(0,j)] = rho_u(x,j);
     rsd[index(1,j)] = V(x,j);
     rsd[index(2,j)] = T(x,j);
+	rsd[index(c_offset_TT,j)] = TT(x,j);
     rsd[index(c_offset_L, j)] = lambda(x,j) - lambda(x,j-1);
     diag[index(c_offset_L, j)] = 0;
     doublereal sum = 0.0;
@@ -999,6 +1003,7 @@ void FreeFlame::evalRightBoundary(doublereal* x, doublereal* rsd,
     rsd[index(0,j)] = rho_u(x,j) - rho_u(x,j-1);
     rsd[index(1,j)] = V(x,j);
     rsd[index(2,j)] = T(x,j) - T(x,j-1);
+	rsd[index(c_offset_TT,j)] = TT(x,j) - TT(x,j-1);
     doublereal sum = 0.0;
     rsd[index(c_offset_L, j)] = lambda(x,j) - lambda(x,j-1);
     diag[index(c_offset_L, j)] = 0;

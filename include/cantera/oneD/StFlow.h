@@ -146,6 +146,7 @@ public:
     virtual void _getInitialSoln(doublereal* x) {
         for (size_t j = 0; j < m_points; j++) {
             T(x,j) = m_thermo->temperature();
+			TT(x,j) = m_thermo->temperature();
             m_thermo->getMassFractions(&Y(x, 0, j));
         }
     }
@@ -466,13 +467,14 @@ protected:
         size_t jloc = (u(x,j) > 0.0 ? j : j + 1);
         return (T(x,jloc) - T(x,jloc-1))/m_dz[jloc-1];
     }
+
     //! @}
 
     doublereal shear(const doublereal* x, size_t j) const {
-        //doublereal c1 = ((m_visc[j-1]))*(V(x,j) - V(x,j-1));
-		//doublereal c2 = ((m_visc[j]))*(V(x,j+1) - V(x,j));
-		doublereal c1 = ((m_visc[j-1])+(((m_rho[j-1]*0.09*m_TKE*m_TKE)/m_ED)))*(V(x,j) - V(x,j-1));
-		doublereal c2 = ((m_visc[j])+(((m_rho[j]*0.09*m_TKE*m_TKE)/m_ED)))*(V(x,j+1) - V(x,j));
+        doublereal c1 = ((m_visc[j-1]))*(V(x,j) - V(x,j-1));
+		doublereal c2 = ((m_visc[j]))*(V(x,j+1) - V(x,j));
+		//doublereal c1 = ((m_visc[j-1])+(((m_rho[j-1]*0.09*m_TKE*m_TKE)/m_ED)))*(V(x,j) - V(x,j-1));
+		//doublereal c2 = ((m_visc[j])+(((m_rho[j]*0.09*m_TKE*m_TKE)/m_ED)))*(V(x,j+1) - V(x,j));
         return 2.0*(c2/(z(j+1) - z(j)) - c1/(z(j) - z(j-1)))/(z(j+1) - z(j-1));
     }
 

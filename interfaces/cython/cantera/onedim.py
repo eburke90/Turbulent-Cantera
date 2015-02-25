@@ -120,7 +120,12 @@ class FlameBase(Sim1D):
     @property
     def T(self):
         """ Array containing the temperature [K] at each grid point. """
-        return self.profile(self.flame, 'T')	
+        return self.profile(self.flame, 'T')
+
+    @property
+    def T_Prime(self):
+        """ Array containing the temperature fluctuations [K] at each grid point. """
+        return self.profile(self.flame, 'T_Prime')			
 
     @property
     def u(self):
