@@ -146,7 +146,7 @@ public:
     virtual void _getInitialSoln(doublereal* x) {
         for (size_t j = 0; j < m_points; j++) {
             T(x,j) = m_thermo->temperature();
-			TT(x,j) = m_thermo->temperature();
+			TT(x,j) = (m_thermo->temperature())*7
             m_thermo->getMassFractions(&Y(x, 0, j));
         }
     }
@@ -486,11 +486,9 @@ protected:
 		return -2.0*(c2/(z(j+1) - z(j)) - c1/(z(j) - z(j-1)))/(z(j+1) - z(j-1));
     }
 
-    doublereal divHeatFlux_TT(const doublereal* x, size_t j) const {
-		doublereal c1 = ((m_tcon[j-1])+(((m_cp[j-1]*m_rho[j-1]*m_TKE*m_TKE*0.09)/(0.85*m_ED))))*(TT(x,j) - TT(x,j-1));
-		doublereal c2 = ((m_tcon[j])+(((m_cp[j]*m_rho[j]*m_TKE*m_TKE*0.09)/(0.85*m_ED))))*(TT(x,j+1) - TT(x,j));
-		//doublereal c1 = ((m_tcon[j-1]))*(T(x,j) - T(x,j-1));
-		//doublereal c2 = ((m_tcon[j]))*(T(x,j+1) - T(x,j));      
+    doublereal divFlux_TT(const doublereal* x, size_t j) const {
+		doublereal c1 = (viscTurb[j-1]/0.7)*(TT(x,j) - TT(x,j-1));
+		doublereal c2 = (viscTurb[j]/0.7)*(TT(x,j+1) - TT(x,j));   
 		return -2.0*(c2/(z(j+1) - z(j)) - c1/(z(j) - z(j-1)))/(z(j+1) - z(j-1));
     }
 

@@ -313,16 +313,19 @@ class FreeFlame(FlameBase):
         Y0 = self.inlet.Y
         u0 = self.inlet.mdot/self.gas.density
         T0 = self.inlet.T
+        TT0 = T0*7
 
         # get adiabatic flame temperature and composition
         self.gas.equilibrate('HP')
         Teq = self.gas.T
+        TTeq = Teq*7
         Yeq = self.gas.Y
         u1 = self.inlet.mdot/self.gas.density
 
         locs = [0.0, 0.3, 0.5, 1.0]
         self.set_profile('u', locs, [u0, u0, u1, u1])
         self.set_profile('T', locs, [T0, T0, Teq, Teq])
+        self.set_profile('T_Prime', locs, [TT0, TT0, TTeq, TTeq])
         self.set_fixed_temperature(0.5 * (T0 + Teq))
         for n in range(self.gas.n_species):
             self.set_profile(self.gas.species_name(n),

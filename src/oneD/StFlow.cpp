@@ -200,11 +200,11 @@ void StFlow::setGas(const doublereal* x, size_t j)
 	doublereal rho_grad, u_grad,A,B,C,D,F,G,I,H;
 	viscTurb[j] = m_rho[j] * 0.09* (m_TKE*m_TKE/m_ED);
 	if (j==0){
-	TempP[j]= TT(x,j);//0.5;
+	TempP[j]= 0.5;
 	A = m_rho[j]*u(x,j);
 
 	}else if (j==1){
-	TempP[j]= TT(x,j);//0.5;
+	TempP[j]= 0.5;
 	m_grad_T[j] = (T(x,j)-T(x,j-1))/(m_z[j]-m_z[j-1]);
 	rho_grad = (m_rho[j]-m_rho[j-1])/(m_z[j]-m_z[j-1]);
 	u_grad = (u(x,j)-u(x,j-1))/(m_z[j]-m_z[j-1]);
@@ -259,6 +259,7 @@ void StFlow::getTempP(doublereal* TempP){
     	TempP[k] = setTempP(k);
     }
 }
+
 void StFlow::setGasAtMidpoint(const doublereal* x, size_t j)
 {
     m_thermo->setTemperature(0.5*(T(x,j)+T(x,j+1)));
@@ -492,29 +493,22 @@ void StFlow::eval(size_t jg, doublereal* xg,
 			//Dummy Transport
 			//-----------------------------------------------
 
-          //setGas(x,j);
+          setGas(x,j);
 
-                // heat release term
-                const vector_fp& h_RT = m_thermo->enthalpy_RT_ref();
-                const vector_fp& cp_R = m_thermo->cp_R_ref();
-
-                sum = 0.0;
-                sum2 = 0.0;
-                doublereal flxk_TT=0;
-                for (k = 0; k < m_nsp; k++) {
-                    flxk_TT = 0.5*(m_flux(k,j-1) + m_flux(k,j));
-                    sum += wdot(k,j)*h_RT[k];
-                    sum2 += flxk_TT*cp_R[k]/m_wt[k];
-                }
-                sum *= GasConstant * TT(x,j);
+                // Temperature Fluctuation
+				doublereal convec_TT, diffus_TT, dttdzj, term,term2;
                 size_t jloc = (u(x,j) > 0.0 ? j : j + 1);
-                double dtdzj = (TT(x,jloc) - TT(x,jloc-1))/m_dz[jloc-1];
-                sum2 *= GasConstant * dtdzj;
+                dttdzj = (TT(x,jloc) - TT(x,jloc-1))/m_dz[jloc-1];
 
+				convec_TT = 0.0; diffus_TT = 0.0; term = 0.0; term2 = 0.0;
+				                
+				convec_TT = -rho_u(x,j)*dttdzj;
+				term = 2.86*viscTurb[j]*dtdzj*dtdzj;
+				term2 = -2.0*m_rho[j]*TT(x,j)*(m_ED/m_TKE);
+				
                 rsd[index(c_offset_TT, j)]   =
-                    - m_cp[j]*rho_u(x,j)*dtdzj
-                    - divHeatFlux_TT(x,j) - (sum*EDC) - sum2;
-                rsd[index(c_offset_TT, j)] /= (m_rho[j]*m_cp[j]);
+                    divFlux_TT(x,j) + convec_TT + term +term2;
+                rsd[index(c_offset_TT, j)] /= m_rho[j];
                 rsd[index(c_offset_TT, j)] -= rdt*(TT(x,j) - TT_prev(j));
                 diag[index(c_offset_TT, j)] = 1;
         }
