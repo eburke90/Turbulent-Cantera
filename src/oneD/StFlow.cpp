@@ -77,6 +77,7 @@ StFlow::StFlow(IdealGasPhase* ph, size_t nsp, size_t points) :
     setBounds(1, -1e20, 1e20); // V
     setBounds(2, 200.0, 1e9); // temperature bounds
     setBounds(3, -1e20, 1e20); // lamda should be negative
+	setBounds(c_offset_TT, 0, 1e9); // T' bounds
 
     // mass fraction bounds
     for (size_t k = 0; k < m_nsp; k++) {
@@ -258,8 +259,6 @@ void StFlow::getTempP(doublereal* TempP){
     	TempP[k] = setTempP(k);
     }
 }
-
-
 void StFlow::setGasAtMidpoint(const doublereal* x, size_t j)
 {
     m_thermo->setTemperature(0.5*(T(x,j)+T(x,j+1)));
@@ -493,7 +492,7 @@ void StFlow::eval(size_t jg, doublereal* xg,
 			//Dummy Transport
 			//-----------------------------------------------
 
-          setGas(x,j);
+          //setGas(x,j);
 
                 // heat release term
                 const vector_fp& h_RT = m_thermo->enthalpy_RT_ref();
@@ -507,15 +506,15 @@ void StFlow::eval(size_t jg, doublereal* xg,
                     sum += wdot(k,j)*h_RT[k];
                     sum2 += flxk_TT*cp_R[k]/m_wt[k];
                 }
-                sum *= GasConstant * T(x,j);
-                dtdzj = dTdz(x,j);
+                sum *= GasConstant * TT(x,j);
+                size_t jloc = (u(x,j) > 0.0 ? j : j + 1);
+                double dtdzj = (TT(x,jloc) - TT(x,jloc-1))/m_dz[jloc-1];
                 sum2 *= GasConstant * dtdzj;
 
                 rsd[index(c_offset_TT, j)]   =
                     - m_cp[j]*rho_u(x,j)*dtdzj
-                    - divHeatFlux(x,j) - (sum*EDC) - sum2;
+                    - divHeatFlux_TT(x,j) - (sum*EDC) - sum2;
                 rsd[index(c_offset_TT, j)] /= (m_rho[j]*m_cp[j]);
-
                 rsd[index(c_offset_TT, j)] -= rdt*(TT(x,j) - TT_prev(j));
                 diag[index(c_offset_TT, j)] = 1;
         }

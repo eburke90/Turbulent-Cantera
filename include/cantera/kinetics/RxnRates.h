@@ -442,10 +442,11 @@ public:
             log_k1 = (A1_[0] + n1_[0] * logT - Ea1_[0] * recipT)*Cc(n1_[0],Ea1_[0],recipT,TprimeOverT);
 			
         } else {
-            double k = 1e-300,kTurb; // non-zero to make log(k) finite
+            double k = 1e-300; // non-zero to make log(k) finite
+			double kTurb = 0;
             for (size_t m = 0; m < m1_; m++) {
                 k += A1_[m] * std::exp(n1_[m] * logT - Ea1_[m] * recipT);
-				kTurb += k*Cc(n1_[m],Ea1_[m],recipT,TprimeOverT);
+				kTurb += k + (k*Cc(n1_[m],Ea1_[m],recipT,TprimeOverT));
             }
 			
             log_k1 = std::log(kTurb);
@@ -455,10 +456,11 @@ public:
         if (m2_ == 1) {
             log_k2 = (A2_[0] + n2_[0] * logT - Ea2_[0] * recipT)*Cc(n2_[0],Ea2_[0],recipT,TprimeOverT);;
         } else {
-            double k = 1e-300,kTurb; // non-zero to make log(k) finite
+            double k = 1e-300; // non-zero to make log(k) finite
+			double kTurb = 0;
             for (size_t m = 0; m < m2_; m++) {
                 k += A2_[m] * std::exp(n2_[m] * logT - Ea2_[m] * recipT);
-				kTurb += k*(Cc(n2_[m],Ea2_[m],recipT,TprimeOverT));
+				kTurb += k + (k*(Cc(n2_[m],Ea2_[m],recipT,TprimeOverT)));
             }
 			
             log_k2 = std::log(kTurb);

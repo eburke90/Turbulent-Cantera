@@ -1,0 +1,16 @@
+﻿Build started 26/02/2015 12:17:31 PM.
+     1>Project "C:\Users\08008043\Documents\Cantera\Turbulent-Cantera - Cc Code\src\Turbulent Cantera - Cc Code.vcxproj" on node 2 (rebuild target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\Turbulent Cantera - Cc Code.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ManifestResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\Turbulent Cantera - Cc Code.exe.embed.manifest.res" "Debug\Turbulent Cantera - Cc Code_manifest.rc" 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\08008043\Documents\Cantera\Turbulent-Cantera - Cc Code\src\Debug\Turbulent Cantera - Cc Code.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Turbulent Cantera - Cc Code.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\08008043\Documents\Cantera\Turbulent-Cantera - Cc Code\src\Debug\Turbulent Cantera - Cc Code.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\08008043\Documents\Cantera\Turbulent-Cantera - Cc Code\src\Debug\Turbulent Cantera - Cc Code.lib" /MACHINE:X86 "Debug\Turbulent Cantera - Cc Code.exe.embed.manifest.res"
+     1>LINK : error LNK2001: unresolved external symbol _WinMainCRTStartup
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Platforms\Win32\Microsoft.Cpp.Win32.Targets(275,5): error MSB6006: "link.exe" exited with code 1120.
+     1>C:\Users\08008043\Documents\Cantera\Turbulent-Cantera - Cc Code\src\Debug\Turbulent Cantera - Cc Code.exe : fatal error LNK1120: 1 unresolved externals
+     1>Done Building Project "C:\Users\08008043\Documents\Cantera\Turbulent-Cantera - Cc Code\src\Turbulent Cantera - Cc Code.vcxproj" (rebuild target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:01.48

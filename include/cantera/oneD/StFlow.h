@@ -486,6 +486,14 @@ protected:
 		return -2.0*(c2/(z(j+1) - z(j)) - c1/(z(j) - z(j-1)))/(z(j+1) - z(j-1));
     }
 
+    doublereal divHeatFlux_TT(const doublereal* x, size_t j) const {
+		doublereal c1 = ((m_tcon[j-1])+(((m_cp[j-1]*m_rho[j-1]*m_TKE*m_TKE*0.09)/(0.85*m_ED))))*(TT(x,j) - TT(x,j-1));
+		doublereal c2 = ((m_tcon[j])+(((m_cp[j]*m_rho[j]*m_TKE*m_TKE*0.09)/(0.85*m_ED))))*(TT(x,j+1) - TT(x,j));
+		//doublereal c1 = ((m_tcon[j-1]))*(T(x,j) - T(x,j-1));
+		//doublereal c2 = ((m_tcon[j]))*(T(x,j+1) - T(x,j));      
+		return -2.0*(c2/(z(j+1) - z(j)) - c1/(z(j) - z(j-1)))/(z(j+1) - z(j-1));
+    }
+
     size_t mindex(size_t k, size_t j, size_t m) {
         return m*m_nsp*m_nsp + m_nsp*j + k;
     }
