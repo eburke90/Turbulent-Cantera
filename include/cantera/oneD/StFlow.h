@@ -146,7 +146,7 @@ public:
     virtual void _getInitialSoln(doublereal* x) {
         for (size_t j = 0; j < m_points; j++) {
             T(x,j) = m_thermo->temperature();
-			TT(x,j) = (m_thermo->temperature())*7
+			TT(x,j) = (m_thermo->temperature())*7;
             m_thermo->getMassFractions(&Y(x, 0, j));
         }
     }
