@@ -187,15 +187,16 @@ class FlameBase(Sim1D):
         T = self.T
         u = self.u
         V = self.V
-        Visc = self.flame.TempP
+        Visc = self.flame.ViscTurb
         TPrime = self.profile(self.flame, 'T_Prime')
+        PP = self.flame.Peclet
 
         csvfile = open(filename, 'w')
         writer = csv.writer(csvfile)
-        writer.writerow(['z (m)','Tprime (K)', 'u (m/s)', 'V (1/s)','T (K)','TempP (K)', 'rho (kg/m3)'] + self.gas.species_names)
+        writer.writerow(['z (m)','Tprime (K)', 'u (m/s)', 'V (1/s)','T (K)','ViscTurb (K)', 'rho (kg/m3)', 'Peclet'] + self.gas.species_names)
         for n in range(self.flame.n_points):
             self.set_gas_state(n)
-            writer.writerow([z[n], TPrime[n], u[n], V[n], T[n],Visc[n], self.gas.density] +
+            writer.writerow([z[n], TPrime[n], u[n], V[n], T[n],Visc[n], self.gas.density, PP[n]] +
                             list(getattr(self.gas, species)))
         csvfile.close()
         if not quiet:
@@ -313,20 +314,17 @@ class FreeFlame(FlameBase):
         Y0 = self.inlet.Y
         u0 = self.inlet.mdot/self.gas.density
         T0 = self.inlet.T
-        TT0 = 0
+
 
         # get adiabatic flame temperature and composition
         self.gas.equilibrate('HP')
         Teq = self.gas.T
-        TTeq = Teq*7
         Yeq = self.gas.Y
         u1 = self.inlet.mdot/self.gas.density
 
         locs = [0.0, 0.3, 0.5, 1.0]
         self.set_profile('u', locs, [u0, u0, u1, u1])
         self.set_profile('T', locs, [T0, T0, Teq, Teq])
-        self.set_profile('T_Prime', locs, [T0, T0, Teq, Teq])
-        #self.set_profile('T_Prime', locs, [TT0, TT0, TTeq, TTeq])
         self.set_fixed_temperature(0.5 * (T0 + Teq))
         for n in range(self.gas.n_species):
             self.set_profile(self.gas.species_name(n),

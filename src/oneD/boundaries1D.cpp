@@ -165,8 +165,9 @@ void Inlet1D::eval(size_t jg, doublereal* xg, doublereal* rg,
     // Temperature
     r[1] = m_temp - x[1];
 
+
 	// Temperature Fluctuations
-    r[3] = (m_temp - x[3]);
+    //r[3] = (m_temp - x[3]);
 
     // both are algebraic constraints
     diag[0] = 0;
@@ -192,7 +193,7 @@ void Inlet1D::eval(size_t jg, doublereal* xg, doublereal* rg,
         // T to the inlet T.
         rb[2] -= x[1];
 
-        rb[4] -= x[3];
+        //rb[4] -= x[3];
 
         // The flow domain sets this to -rho*u. Add mdot to
         // specify the mass flow rate.
@@ -220,7 +221,8 @@ void Inlet1D::eval(size_t jg, doublereal* xg, doublereal* rg,
         rb = r - boffset;
         rb[1] -= m_V0;
         rb[2] -= x[1]; // T
-        rb[4] -= x[3]; // T'
+		//rb[4] -= x[3]; // T'
+
         rb[0] += x[0]; // u
         for (size_t k = 1; k < m_nsp; k++) {
             rb[c_offset_Y+k] += x[0]*(m_yin[k]);

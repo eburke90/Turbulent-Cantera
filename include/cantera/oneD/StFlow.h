@@ -138,6 +138,13 @@ public:
         return TempP[j];
     }
 
+	// Getter for Temperature Fluctuations
+	void getpec(doublereal* peclet);
+
+    doublereal setpec(size_t j) const {
+        return peclet[j];
+    }
+
 	//! The current turbulent dissipation
     doublereal ED() const {
         return m_ED;
@@ -146,7 +153,7 @@ public:
     virtual void _getInitialSoln(doublereal* x) {
         for (size_t j = 0; j < m_points; j++) {
             T(x,j) = m_thermo->temperature();
-			TT(x,j) = (m_thermo->temperature())*7;
+			TT(x,j) = 0;
             m_thermo->getMassFractions(&Y(x, 0, j));
         }
     }
@@ -488,8 +495,9 @@ protected:
 
     doublereal divFlux_TT(const doublereal* x, size_t j) const {
 		doublereal c1 = (viscTurb[j-1]/0.7)*(TT(x,j) - TT(x,j-1));
-		doublereal c2 = (viscTurb[j]/0.7)*(TT(x,j+1) - TT(x,j));   
-		return -2.0*(c2/(z(j+1) - z(j)) - c1/(z(j) - z(j-1)))/(z(j+1) - z(j-1));
+		doublereal c2 = (viscTurb[j]/0.7)*(TT(x,j+1) - TT(x,j)); 
+
+		return 2.0*(c2/(z(j+1) - z(j)) - c1/(z(j) - z(j-1)))/(z(j+1) - z(j-1));
     }
 
     size_t mindex(size_t k, size_t j, size_t m) {
@@ -523,6 +531,7 @@ protected:
 	vector_fp viscTurb;
 	doublereal TempPrime;
 	vector_fp TempP;
+	vector_fp peclet;
 	vector_fp m_bar;
 	vector_fp Sigma2;
 

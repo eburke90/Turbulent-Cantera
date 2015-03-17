@@ -116,6 +116,7 @@ void StFlow::resize(size_t ncomponents, size_t points)
 	TempP.resize(m_points, 0.0);
 	m_bar.resize(m_points, 0.0);
 	Sigma2.resize(m_points, 0.0);
+	peclet.resize(m_points, 0.0);
 
     if (m_transport_option ==  c_Mixav_Transport) {
         m_diff.resize(m_nsp*m_points);
@@ -192,7 +193,6 @@ void StFlow::setGas(const doublereal* x, size_t j)
     m_thermo->setMassFractions_NoNorm(yy);
     m_thermo->setPressure(m_press);
 	m_grad_T.resize(m_points, 0.0);
-	viscTurb.resize(m_points, 0.0);
 	TempP.resize(m_points, 0.0);
 	m_bar.resize(m_points, 0.0);
 	Sigma2.resize(m_points, 0.0);
@@ -232,7 +232,7 @@ void StFlow::setGas(const doublereal* x, size_t j)
 	
 	Sigma2[j] = (((F*A*I)+(F*G*B)-(D*I*H))/((A*I)+((F*B*I)/H)+(C*H*I)));
 
-	TempP[j] = (sqrt(Sigma2[j]))*0.084;
+	TempP[j] = (sqrt(Sigma2[j]));
 	}
 
 	TempPrime = (sqrt(Sigma2[j]))*0.084;
@@ -257,6 +257,12 @@ void StFlow::getviscTurb(doublereal* viscTurb){
 void StFlow::getTempP(doublereal* TempP){
 	for (size_t k = 0; k < m_points; k++) {
     	TempP[k] = setTempP(k);
+    }
+}
+
+void StFlow::getpec(doublereal* peclet){
+	for (size_t k = 0; k < m_points; k++) {
+    	peclet[k] = setpec(k);
     }
 }
 
@@ -493,24 +499,23 @@ void StFlow::eval(size_t jg, doublereal* xg,
 			//Dummy Transport
 			//-----------------------------------------------
 
-          setGas(x,j);
-
                 // Temperature Fluctuation
-				doublereal convec_TT, diffus_TT, dttdzj, term,term2;
-                size_t jloc = (u(x,j) > 0.0 ? j : j + 1);
-                dttdzj = (TT(x,jloc) - TT(x,jloc-1))/m_dz[jloc-1];
+			setGas(x,j);
+			doublereal convec_TT, dttdzj, term,term2;
+            size_t jloc = (u(x,j) > 0.0 ? j : j + 1);
+            dttdzj = (TT(x,jloc) - TT(x,jloc-1))/m_dz[jloc-1];
 
-				convec_TT = 0.0; diffus_TT = 0.0; term = 0.0; term2 = 0.0;
-				                
-				convec_TT = -rho_u(x,j)*dttdzj;
-				term = 2.86*viscTurb[j]*dtdzj*dtdzj;
-				term2 = -2.0*m_rho[j]*TT(x,j)*(m_ED/m_TKE);
+			convec_TT = 0.0; term = 0.0; term2 = 0.0;
 				
-                rsd[index(c_offset_TT, j)]   =
-                    divFlux_TT(x,j) + convec_TT + term +term2;
-                rsd[index(c_offset_TT, j)] /= m_rho[j];
-                rsd[index(c_offset_TT, j)] -= rdt*(TT(x,j) - TT_prev(j));
-                diag[index(c_offset_TT, j)] = 1;
+				                
+			convec_TT = -rho_u(x,j)*dttdzj;
+			term = 2.86*viscTurb[j]*dtdzj*dtdzj;
+			term2 = -2.0*m_rho[j]*TT(x,j)*(m_ED/m_TKE);
+		
+            rsd[index(c_offset_TT, j)] =  divFlux_TT(x,j) + convec_TT + term + term2;
+            rsd[index(c_offset_TT, j)] /= m_rho[j];
+            rsd[index(c_offset_TT, j)] -= rdt*(TT(x,j) - TT_prev(j));
+            diag[index(c_offset_TT, j)] = 1;
         }
     }
 }
